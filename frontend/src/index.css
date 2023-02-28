@@ -1,0 +1,18 @@
+div.rapper{
+  max-width: 33%;
+}
+span.incorrect{
+  color: red;
+  text-decoration: underline;
+}
+span.correct{
+  color: #00FF00;
+}
+div.cheat{
+  color: red;
+  max-width: 100%;
+}
+span.error{
+  color: red;
+}
+
