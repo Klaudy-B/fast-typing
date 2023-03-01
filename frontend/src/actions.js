@@ -74,7 +74,7 @@ export const usernameAction = async ({ request })=>{
     const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/change-username`,{
         method: request.method,
         body: JSON.stringify({
-            username: formData.get('username'),
+            username: formData.get('new-username'),
             password: formData.get('password')
         }),
         credentials: 'include',
@@ -88,5 +88,30 @@ export const usernameAction = async ({ request })=>{
     const data = await res.json();
     button.disabled = false;
     button.innerText = 'Change username';
+    return data;
+}
+
+export const passwordAction = async ({ request })=>{
+    const button = document.querySelector('form > button');
+    button.disabled = true;
+    button.innerText = 'Changing your password...';
+    const formData = await request.formData();
+    const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/change-password`,{
+        method: request.method,
+        body: JSON.stringify({
+            password1: formData.get('current-password'),
+            password2: formData.get('new-password')
+        }),
+        credentials: 'include',
+        headers: {
+            "content-type": "application/json"
+        }
+    })
+    if(res.status === 500){
+        throw Error(errorMessage);
+    }
+    const data = await res.json();
+    button.disabled = false;
+    button.innerText = 'Change password';
     return data;
 }

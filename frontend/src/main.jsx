@@ -16,11 +16,13 @@ import NavbarAndLayout from './components/NavbarAndLayout';
 import Play from './components/GameComponents/playComponents/Play';
 import Settings from './components/Settings';
 import Username from './components/Username';
+import Logout from './components/Logout';
+import Password from './components/password';
 
-import { loginAction, logoutAction, signupAction, usernameAction } from './actions';
+import { loginAction, logoutAction, passwordAction, signupAction, usernameAction } from './actions';
 
 import { checkLoginStateLoader } from './loaders';
-import Logout from './components/Logout';
+
 
 
 
@@ -35,6 +37,7 @@ const router = createBrowserRouter(
         <Route path='settings' element={<Settings />}>
           <Route path='username' element={<Username />} action={usernameAction} />
           <Route path='logout' element={<Logout />} action={logoutAction} />
+          <Route path='password' element={<Password />} action={passwordAction} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>

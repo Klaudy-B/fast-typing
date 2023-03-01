@@ -4,10 +4,10 @@ const Username = () => {
     const data = useActionData();
     return <Form method="post" action="/settings/username">
         <label>New username:</label>
-        <input type="text" name="new-username" />
+        <input type="text" name="new-username" required />
         {data&&data.errorFields&& <div className="error-message">{data.errorFields.username}</div>}
         <label>Your current password:</label>
-        <input type="password" name="password" />
+        <input type="password" name="password" required />
         {data&&data.errorFields&& <div className="error-message">{data.errorFields.password}</div>}
         <button>Change username</button>
         {data&&data.success&&<div className="success-message">{data.success}</div>}

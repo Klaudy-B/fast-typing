@@ -4,10 +4,10 @@ const { genSalt, hash, compare } = require('bcrypt');
 const { createToken, userValidator, setCookie } = require('../helpers/helpers');
 const {
     signupErrorHandler,
-    generalErrorHandler
+    generalErrorHandler,
 } = require('../errorhandlers/authErrorHandlers');
 
-const checkLoginStateController = async (req, res)=>{
+module.exports.checkLoginStateController = async (req, res)=>{
     try{
         if(!req.cookies || !req.cookies.fasttyping){
             return res.status(200).json({});
@@ -30,7 +30,7 @@ const checkLoginStateController = async (req, res)=>{
         generalErrorHandler(error, res);
     }
 }
-const signupController = async (req, res)=>{
+module.exports.signupController = async (req, res)=>{
     const { username, password1, password2 } = req.body;
     try{
         userValidator(username, password1, password2);
@@ -45,7 +45,7 @@ const signupController = async (req, res)=>{
     }
 }
 
-const loginController = async (req, res)=>{
+module.exports.loginController = async (req, res)=>{
     const { username, password } = req.body;
     try{
         const user = await User.findOne({ username });
@@ -64,7 +64,7 @@ const loginController = async (req, res)=>{
     }
 }
 
-const logoutController = (req, res)=>{
+module.exports.logoutController = (req, res)=>{
     try{
         setCookie(res, 'fasttyping', '', 1);
         return res.status(200).end();
@@ -73,4 +73,43 @@ const logoutController = (req, res)=>{
     }
 }
 
-module.exports = { signupController, loginController, logoutController, checkLoginStateController };
+module.exports.changeUsernameController = async (req, res)=>{
+    try{
+        const { username, password } = req.body;
+        if(!username){
+            throw {errorFields: {username: 'You have to provide a new username if you want to change yours.'}}
+        }
+        const user = await User.findOne({username: req.username});
+        const auth = await compare(password, user.password);
+        if(!auth){
+            throw{errorFields: {password: 'Incorrect password.'}};
+        }
+        user.username = username;
+        await user.save();
+        return res.status(201).json({success: 'Your username have been changed successfully.'});
+    }catch(error){
+        signupErrorHandler(error, res);
+    }
+}
+module.exports.changePasswordController = async (req, res)=>{
+    try{
+        const { password1, password2 } = req.body;
+        if(!password2){
+            throw {errorFields: {password2: 'You have to provide a new password if you want to change yours.'}};
+        }
+        if(password2.length<4){
+            throw { errorFields: {password2: 'The password must have at least 4 characters.'}}
+        }
+        const user = await User.findOne({ username: req.username });
+        const auth = await compare(password1, user.password);
+        if(!auth){
+            throw {errorFields: {password1: 'Incorrect password.'}}
+        }
+        const salt = await genSalt(10);
+        user.password = await hash(password2, salt);
+        user.save();
+        return res.status(201).json({success: 'Your password have been changed successfully.'});
+    }catch(error){
+        signupErrorHandler(error, res);
+    }
+}

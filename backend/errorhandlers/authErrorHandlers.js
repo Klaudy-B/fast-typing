@@ -1,6 +1,6 @@
 module.exports.generalErrorHandler = (error, response)=>{
     if(error.errorMessage){
-        return response.status(400).json(error.errorMessage);
+        return response.status(400).json(error);
     }
     console.log(error);
     return response.status(500).end();
