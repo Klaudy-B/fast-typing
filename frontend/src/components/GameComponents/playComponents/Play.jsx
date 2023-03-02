@@ -13,7 +13,7 @@ function Play() {
     return <>
       <header>
       <div className="level">Level: { useParams().level }</div>
-      <div className="player-name">Player: {useContext(UserContext)}</div>
+      <div className="player-name">Player: {useContext(UserContext).user}</div>
       </header>
       <div className="record">Current record: {
         state.loading?<Loading />:

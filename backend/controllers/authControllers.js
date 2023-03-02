@@ -6,6 +6,7 @@ const {
     signupErrorHandler,
     generalErrorHandler,
 } = require('../errorhandlers/authErrorHandlers');
+const { default: isEmail } = require('validator/lib/isEmail');
 
 module.exports.checkLoginStateController = async (req, res)=>{
     try{
@@ -31,15 +32,15 @@ module.exports.checkLoginStateController = async (req, res)=>{
     }
 }
 module.exports.signupController = async (req, res)=>{
-    const { username, password1, password2 } = req.body;
+    const { username, password1, password2, email } = req.body;
     try{
-        userValidator(username, password1, password2);
+        userValidator(username, password1, password2, email);
         const salt = await genSalt(10);
         const password = await hash(password1, salt);
         const user = await User.create({ username, password, easy: {value: 0}, medium: {value: 0}, hard: {value: 0} });
         const token = createToken(user._id);
         setCookie(res, 'fasttyping', token);
-        return res.status(201).json({user: user.username});
+        return res.status(201).json({user: user.username, email: (email?true: false)});
     }catch(error){
         signupErrorHandler(error, res);
     }
@@ -109,6 +110,22 @@ module.exports.changePasswordController = async (req, res)=>{
         user.password = await hash(password2, salt);
         user.save();
         return res.status(201).json({success: 'Your password have been changed successfully.'});
+    }catch(error){
+        signupErrorHandler(error, res);
+    }
+}
+
+module.exports.addEmailcontroller = (req, res)=>{
+    try{
+    const { email } = req.body;
+    const bool = isEmail(email);
+    if(!bool){
+        throw { errorFields: {email: `${email} is not a valide email.`} };
+    }
+    const user = User.findOne({ username: req.username });
+    user.email = {value: email, verified: false, verificationCode: 0, updatedAt: Date.now()};
+    user.save();
+    return res.status(200).json('your email has been added successfully.');
     }catch(error){
         signupErrorHandler(error, res);
     }

@@ -1,4 +1,5 @@
 const { sign } = require('jsonwebtoken');
+const { default: isEmail } = require('validator/lib/isEmail');
 
 const cookiesMaxAge = 365*24*60*60*1000;
 module.exports.wordsTotalNumber = 4;
@@ -9,8 +10,8 @@ module.exports.setCookie = (res, key, value, maxAge)=>{
         res.cookie(key, value, {httpOnly: true, maxAge , sameSite: 'strict'});
     }  
 }
-module.exports.userValidator = (username, password1, password2)=>{
-    let errorFields = {username: '', password1: '', password2: ''};
+module.exports.userValidator = (username, password1, password2, email)=>{
+    let errorFields = {username: '', password1: '', password2: '', email: ''};
     if(!username){
         errorFields.username = 'The username field is required.';
     }
@@ -31,6 +32,13 @@ module.exports.userValidator = (username, password1, password2)=>{
     }
     if(errorFields.password2){
         throw { errorFields };
+    }
+    if(email){
+        const bool = isEmail(email);
+        if(!bool){
+            errorFields.email = `${email} is not a valide email.`
+            throw { errorFields }
+        }
     }
 }
 module.exports.createToken = (id)=>{

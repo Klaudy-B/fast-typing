@@ -6,7 +6,8 @@ const {
     logoutController,
     checkLoginStateController,
     changePasswordController,
-    changeUsernameController
+    changeUsernameController,
+    addEmailController
 } = require('../controllers/authControllers');
 
 
@@ -14,6 +15,7 @@ router.post('/login', loginController);
 router.post('/signup', signupController);
 router.post('/change-username', verifyUser, changeUsernameController);
 router.post('/change-password', verifyUser, changePasswordController);
+router.post('/add-email', addEmailController);
 
 router.get('/check-login-state', checkLoginStateController);
 router.get('/logout', logoutController);

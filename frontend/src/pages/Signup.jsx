@@ -3,8 +3,14 @@ import { useActionData, Form, Navigate } from "react-router-dom";
 const Signup = () => {
     document.title = 'Sign up';
     const data = useActionData();
-    if(data&&data.user){
+    if(data&&data.user&&!data.email){
         return <Navigate to='/' replace={true} />
+    }
+    if(data&&data.user&&data.email){
+        return <div className="success-message">
+            Your account have been created successfully. Click <Link to='settings/verify-email'>here</Link> to verify your email.<br />
+            <Link to='/'>I will do it later</Link>
+        </div>
     }
     return (
         <Form method="post" action="/signup">

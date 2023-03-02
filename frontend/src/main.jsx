@@ -19,9 +19,10 @@ import Username from './components/Username';
 import Logout from './components/Logout';
 import Password from './components/password';
 
-import { loginAction, logoutAction, passwordAction, signupAction, usernameAction } from './actions';
+import { addEmailAction, loginAction, logoutAction, passwordAction, signupAction, usernameAction, verifyEmailAction } from './actions';
 
 import { checkLoginStateLoader } from './loaders';
+import VerifyEmail from './components/VerifyEmail';
 
 
 
@@ -34,10 +35,12 @@ const router = createBrowserRouter(
         <Route path='login' element={<Login />} action={loginAction} />
         <Route path='signup' element={<Signup />} action={signupAction} />
         <Route path='play/:level' element={<Protected children={<Play />} />} />
-        <Route path='settings' element={<Settings />}>
+        <Route path='settings' element={<Settings />} errorElement={<Oops />}>
           <Route path='username' element={<Username />} action={usernameAction} />
           <Route path='logout' element={<Logout />} action={logoutAction} />
           <Route path='password' element={<Password />} action={passwordAction} />
+          <Route path='verify-email' element={<VerifyEmail />} action={verifyEmailAction} />
+          <Route path='add-email' element={<AddEmail />} action={addEmailAction} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>

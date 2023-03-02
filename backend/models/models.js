@@ -12,6 +12,12 @@ module.exports.User = new model('user', Schema(
         {
             username: {type: String, required: true},
             password: String,
+            email:{
+                value: String,
+                verified: Boolean,
+                verificationCode: Number,
+                updatedAt: Date
+            },
             easy: levelSchema,
             medium: levelSchema,
             hard: levelSchema
