@@ -7,6 +7,7 @@ const {
     generalErrorHandler,
 } = require('../errorhandlers/authErrorHandlers');
 const { default: isEmail } = require('validator/lib/isEmail');
+const { createTransport } = require('nodemailer');
 
 module.exports.checkLoginStateController = async (req, res)=>{
     try{
@@ -26,7 +27,7 @@ module.exports.checkLoginStateController = async (req, res)=>{
             throw { errorMessage:'Token not valid.'};
         }
         setCookie(res, 'fasttyping', req.cookies.fasttyping);
-        return res.status(200).json({ user: user.username });
+        return res.status(200).json({ user: user.username, email: (user.email.value?true: false), verified: user.email.verified});
     }catch(error){
         generalErrorHandler(error, res);
     }
@@ -37,7 +38,13 @@ module.exports.signupController = async (req, res)=>{
         userValidator(username, password1, password2, email);
         const salt = await genSalt(10);
         const password = await hash(password1, salt);
-        const user = await User.create({ username, password, easy: {value: 0}, medium: {value: 0}, hard: {value: 0} });
+        const body = { username, password, easy: {value: 0}, medium: {value: 0}, hard: {value: 0} };
+        if(email){
+            body.email = {value: email, verified: false, verificationCode: 0, updatedAt: Date.now()};
+        }else{
+            body.email = {value: '', verified: false, verificationCode: 0};
+        }
+        const user = await User.create(body);
         const token = createToken(user._id);
         setCookie(res, 'fasttyping', token);
         return res.status(201).json({user: user.username, email: (email?true: false)});
@@ -77,17 +84,17 @@ module.exports.logoutController = (req, res)=>{
 module.exports.changeUsernameController = async (req, res)=>{
     try{
         const { username, password } = req.body;
-        if(!username){
-            throw {errorFields: {username: 'You have to provide a new username if you want to change yours.'}}
-        }
         const user = await User.findOne({username: req.username});
         const auth = await compare(password, user.password);
         if(!auth){
             throw{errorFields: {password: 'Incorrect password.'}};
         }
+        if(!username){
+            throw {errorFields: {username: 'You have to provide a new username if you want to change yours.'}}
+        }
         user.username = username;
         await user.save();
-        return res.status(201).json({success: 'Your username have been changed successfully.'});
+        return res.status(201).json({success: 'Your username has been changed successfully.'});
     }catch(error){
         signupErrorHandler(error, res);
     }
@@ -95,38 +102,101 @@ module.exports.changeUsernameController = async (req, res)=>{
 module.exports.changePasswordController = async (req, res)=>{
     try{
         const { password1, password2 } = req.body;
+        const user = await User.findOne({ username: req.username });
+        const auth = await compare(password1, user.password);
+        if(!auth){
+            throw {errorFields: {password1: 'Incorrect password.'}}
+        }
         if(!password2){
             throw {errorFields: {password2: 'You have to provide a new password if you want to change yours.'}};
         }
         if(password2.length<4){
             throw { errorFields: {password2: 'The password must have at least 4 characters.'}}
         }
-        const user = await User.findOne({ username: req.username });
-        const auth = await compare(password1, user.password);
-        if(!auth){
-            throw {errorFields: {password1: 'Incorrect password.'}}
-        }
         const salt = await genSalt(10);
         user.password = await hash(password2, salt);
-        user.save();
-        return res.status(201).json({success: 'Your password have been changed successfully.'});
+        await user.save();
+        return res.status(201).json({success: 'Your password has been changed successfully.'});
     }catch(error){
         signupErrorHandler(error, res);
     }
 }
 
-module.exports.addEmailcontroller = (req, res)=>{
+module.exports.addEmailcontroller = async (req, res)=>{
     try{
-    const { email } = req.body;
-    const bool = isEmail(email);
-    if(!bool){
-        throw { errorFields: {email: `${email} is not a valide email.`} };
-    }
-    const user = User.findOne({ username: req.username });
-    user.email = {value: email, verified: false, verificationCode: 0, updatedAt: Date.now()};
-    user.save();
-    return res.status(200).json('your email has been added successfully.');
+        const { email } = req.body;
+        const bool = isEmail(email);
+        if(!bool){
+            throw { errorFields: {email: `${email} is not a valide email.`} };
+        }
+        const user = await User.findOne({ username: req.username });
+        user.email = {value: email, verified: false, verificationCode: 0, updatedAt: Date.now()};
+        await user.save();
+        return res.status(200).json({success: 'your email has been added successfully.'});
     }catch(error){
         signupErrorHandler(error, res);
+    }
+}
+module.exports.verifyEmailController = async (req, res)=>{
+    if(req.method === 'get'){
+        try{
+            const user = await User.findOne({ username: req.username });
+            if(!user.email){
+                return res.status(401).json({error: "You don't have a recovery email for your account. You can add one in the settings."});
+            }
+            let verificationCode = '';
+            for(let i=0; i<4; i++){
+                verificationCode += Math.round( Math.random()*10 );
+            }
+            user.email.verificationCode = verificationCode;
+            await user.save();
+            createTransport(
+                {
+                    service: 'gmail',
+                    auth: {
+                        user: 'fasttypingaddress@gmail.com',
+                        pass: 'fasttypingadmin'
+                    }
+                }
+            ).sendMail(
+                {
+                    from: 'fasttypingaddress@gmail.com',
+                    to: `${user.email.value}`,
+                    subject: 'Your email verification code',
+                    text: `${verificationCode} is your fast-typing email verification code. This code will expire in 10 minutes.`
+                }, (error, info)=>{
+                    if(error){
+                        throw error;
+                    }
+                    return;
+                }
+            )
+            const emailToken = createToken(user.email.value);
+            setCookie(res, 'fasttypingemailverification', emailToken, 10*60*1000);
+            return res.status(200).json({codeSent: true});
+        }catch(error){
+            generalErrorHandler(error, res);
+        }
+    }
+    if(req.method === 'post'){
+        try{
+            if(!req.cookies.fasttypingemailverification){
+                return res.status(401).json({error: 'The code has expired.'});
+            }
+            const user = await User.findOne({ username: req.username });
+            if(!user.email){
+                return res.status(401).json({error: "You don't have a recovery email for your account. You can add one in the settings."});
+            }
+            if(!user.email.verificationCode){
+                return res.status(401).json({error: "You don't have a verification code for this email."});
+            }
+            const { verificationCode } = req.body;
+            if(verificationCode !== user.email.verificationCode){
+                return res.status(401).json({noMatch: "The code didn't match."});
+            }
+            return res.status(200).json({success: 'Your email is verified!'});
+        }catch(error){
+            generalErrorHandler(error, res);
+        }
     }
 }

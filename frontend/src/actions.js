@@ -143,23 +143,38 @@ export const addEmailAction = async ({ request })=>{
 export const verifyEmailAction = async ({ request })=>{
     const button = document.querySelector('form > button');
     button.disabled = true;
-    button.innerText = 'Please wait...';
-    const formData = await request.formData();
-    const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/verify-email`,{
-        method: request.method,
-        body: JSON.stringify({
-            verificationCode: formData.get('verification-code')
-        }),
-        credentials: 'include',
-        headers: {
-            "content-type": "application/json"
+    if(button.innerText === 'Submit'){
+        button.innerText = 'Please wait...';
+        const formData = await request.formData();
+        const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/verify-email`,{
+            method: request.method,
+            body: JSON.stringify({
+                verificationCode: formData.get('verification-code')
+            }),
+            credentials: 'include',
+            headers: {
+                "content-type": "application/json"
+            }
+        })
+        if(res.status === 500){
+            throw Error(errorMessage);
         }
-    })
-    if(res.status === 500){
-        throw Error(errorMessage);
+        const data = await res.json();
+        button.disabled = false;
+        button.innerText = 'Submit';
+        return data;
     }
-    const data = await res.json();
-    button.disabled = false;
-    button.innerText = 'Submit';
-    return data;
+    if(button.innerText === 'Send me the code'){
+        button.innerText = 'Please wait...';
+        const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/verify-email`, {
+            credentials: 'include'
+        })
+        if(res.status === 500){
+            throw Error(errorMessage);
+        }
+        const data = await res.json();
+        button.disabled = false;
+        button.innerText = 'Send me the code';
+        return data;
+    }
 }

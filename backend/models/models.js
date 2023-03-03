@@ -16,7 +16,6 @@ module.exports.User = new model('user', Schema(
                 value: String,
                 verified: Boolean,
                 verificationCode: Number,
-                updatedAt: Date
             },
             easy: levelSchema,
             medium: levelSchema,
