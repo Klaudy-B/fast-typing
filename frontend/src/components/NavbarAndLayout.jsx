@@ -25,7 +25,7 @@ const NavbarAndLayout = () => {
       </div>
     </header>
     {data.errorMessage&& <div className="error-message">{ data.errorMessage }</div>}
-      <UserContext.Provider value={{user: data.user, email: data.email, verified: data.verified}}>
+      <UserContext.Provider value={{user: data.user, verified: data.verified}}>
         <Outlet />
       </UserContext.Provider>
     <footer>Copyright 2023 Fast-Typing</footer>

@@ -7,7 +7,7 @@ const {
     checkLoginStateController,
     changePasswordController,
     changeUsernameController,
-    addEmailController,
+    changeEmailController,
     verifyEmailController
 } = require('../controllers/authControllers');
 
@@ -16,7 +16,7 @@ router.post('/login', loginController);
 router.post('/signup', signupController);
 router.post('/change-username', verifyUser, changeUsernameController);
 router.post('/change-password', verifyUser, changePasswordController);
-router.post('/add-email', verifyUser, addEmailController);
+router.post('/change-email', verifyUser, changeEmailController);
 router.post('/verify-email', verifyUser, verifyEmailController);
 
 router.get('/check-login-state', checkLoginStateController);

@@ -10,8 +10,11 @@ const VerifyEmail = () => {
     }
     return <Form method="post" action="/settings/verifyEmail">
         {!data&&<button>Send me the code</button>}
-        {data&&data.codeSent&&<><input type="text" name="verification-code" required /><br />
-        <button>Submit</button></>}
+        {data&&data.codeSent&&<>
+        <input type="text" name="verification-code" required /><br />
+        <button>Submit</button>
+        {data.noMatch&&<div className="error-message">{data.noMatch}</div>}
+        </>}
         {data&&data.success&&<div className="success-message">{data.success}</div>}
         {data&&data.error&&<div className="error-message">{data.error}</div>}
     </Form>

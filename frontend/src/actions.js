@@ -34,6 +34,7 @@ export const signupAction = async ({ request })=>{
         method: request.method,
         body: JSON.stringify({
             username: formData.get('username'),
+            email: formData.get('email'),
             password1: formData.get('password1'),
             password2: formData.get('password2')
         }),
@@ -116,15 +117,16 @@ export const passwordAction = async ({ request })=>{
     return data;
 }
 
-export const addEmailAction = async ({ request })=>{
+export const EmailAction = async ({ request })=>{
     const button = document.querySelector('form > button');
     button.disabled = true;
-    button.innerText = 'Adding email...';
+    button.innerText = 'Changing email...';
     const formData = await request.formData();
-    const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/add-email`,{
+    const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/change-email`,{
         method: request.method,
         body: JSON.stringify({
-            email: formData.get('email')
+            email: formData.get('email'),
+            password: formData.get('password')
         }),
         credentials: 'include',
         headers: {
@@ -136,7 +138,7 @@ export const addEmailAction = async ({ request })=>{
     }
     const data = await res.json();
     button.disabled = false;
-    button.innerText = 'Add email';
+    button.innerText = 'Change email';
     return data;
 }
 

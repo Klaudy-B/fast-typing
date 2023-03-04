@@ -18,8 +18,15 @@ module.exports.userValidator = (username, password1, password2, email)=>{
     if(!password1){
         errorFields.password1 = 'The password field is required.';
     }
-    if(errorFields.username || errorFields.password1){
+    if(!email){
+        errorFields.email = 'The email field is required.';
+    }
+    if(errorFields.username || errorFields.password1 || errorFields.email){
         throw { errorFields };
+    }
+    const bool = isEmail(email);
+    if(!bool){
+        errorFields.email = `${email} is not a valide email.`;
     }
     if(password1.length<4){
         errorFields.password1 = 'Password must have at least 4 characters.';
@@ -33,12 +40,8 @@ module.exports.userValidator = (username, password1, password2, email)=>{
     if(errorFields.password2){
         throw { errorFields };
     }
-    if(email){
-        const bool = isEmail(email);
-        if(!bool){
-            errorFields.email = `${email} is not a valide email.`
-            throw { errorFields }
-        }
+    if(errorFields.email){
+        throw { errorFields };
     }
 }
 module.exports.createToken = (id)=>{

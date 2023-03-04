@@ -1,14 +1,11 @@
-import { useActionData, Form, Navigate } from "react-router-dom";
+import { useActionData, Form, Link } from "react-router-dom";
 
 const Signup = () => {
     document.title = 'Sign up';
     const data = useActionData();
-    if(data&&data.user&&!data.email){
-        return <Navigate to='/' replace={true} />
-    }
-    if(data&&data.user&&data.email){
+    if(data&&data.success){
         return <div className="success-message">
-            Your account have been created successfully. Click <Link to='settings/verify-email'>here</Link> to verify your email.<br />
+            {data.sccess} Click <Link to='settings/verify-email'>here</Link> to verify your email.<br />
             <Link to='/'>I will do it later</Link>
         </div>
     }
@@ -17,6 +14,9 @@ const Signup = () => {
             <label>Username:</label>
             <input type="text" name="username" required />
             <div className="username error-message">{data&&data.errorFields&& data.errorFields.username}</div>
+            <label>Your email:</label>
+            <input type="email" name="email" required />
+            {data&&data.errorFields&&<div className="error-message">{data.errorFields.email}</div>}
             <label>Password:</label>
             <input type="password" name="password1" required />
             <div className="password1 error-message">{data&&data.errorFields&& data.errorFields.password1}</div>

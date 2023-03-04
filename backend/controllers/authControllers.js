@@ -27,7 +27,7 @@ module.exports.checkLoginStateController = async (req, res)=>{
             throw { errorMessage:'Token not valid.'};
         }
         setCookie(res, 'fasttyping', req.cookies.fasttyping);
-        return res.status(200).json({ user: user.username, email: (user.email.value?true: false), verified: user.email.verified});
+        return res.status(200).json({ user: user.username, verified: user.email.verified});
     }catch(error){
         generalErrorHandler(error, res);
     }
@@ -38,16 +38,11 @@ module.exports.signupController = async (req, res)=>{
         userValidator(username, password1, password2, email);
         const salt = await genSalt(10);
         const password = await hash(password1, salt);
-        const body = { username, password, easy: {value: 0}, medium: {value: 0}, hard: {value: 0} };
-        if(email){
-            body.email = {value: email, verified: false, verificationCode: 0, updatedAt: Date.now()};
-        }else{
-            body.email = {value: '', verified: false, verificationCode: 0};
-        }
+        const body = { username, password, easy: {value: 0}, medium: {value: 0}, hard: {value: 0}, email: {value: email, verified: false, verificationCode: 0, updatedAt: Date.now()} };
         const user = await User.create(body);
         const token = createToken(user._id);
         setCookie(res, 'fasttyping', token);
-        return res.status(201).json({user: user.username, email: (email?true: false)});
+        return res.status(201).json({success: 'Your account have been created successfully.'});
     }catch(error){
         signupErrorHandler(error, res);
     }
@@ -122,17 +117,21 @@ module.exports.changePasswordController = async (req, res)=>{
     }
 }
 
-module.exports.addEmailcontroller = async (req, res)=>{
+module.exports.changeEmailcontroller = async (req, res)=>{
     try{
-        const { email } = req.body;
+        const { email, password } = req.body;
+        const user = await User.findOne({ username: req.username });
+        const auth = compare(password, user.password);
+        if(!auth){
+            throw { errorFields: {password: 'Incorrect password.'} };
+        }
         const bool = isEmail(email);
         if(!bool){
             throw { errorFields: {email: `${email} is not a valide email.`} };
         }
-        const user = await User.findOne({ username: req.username });
         user.email = {value: email, verified: false, verificationCode: 0, updatedAt: Date.now()};
         await user.save();
-        return res.status(200).json({success: 'your email has been added successfully.'});
+        return res.status(200).json({success: 'your email has been changed successfully.'});
     }catch(error){
         signupErrorHandler(error, res);
     }
@@ -141,9 +140,6 @@ module.exports.verifyEmailController = async (req, res)=>{
     if(req.method === 'get'){
         try{
             const user = await User.findOne({ username: req.username });
-            if(!user.email){
-                return res.status(401).json({error: "You don't have a recovery email for your account. You can add one in the settings."});
-            }
             let verificationCode = '';
             for(let i=0; i<4; i++){
                 verificationCode += Math.round( Math.random()*10 );
@@ -184,16 +180,15 @@ module.exports.verifyEmailController = async (req, res)=>{
                 return res.status(401).json({error: 'The code has expired.'});
             }
             const user = await User.findOne({ username: req.username });
-            if(!user.email){
-                return res.status(401).json({error: "You don't have a recovery email for your account. You can add one in the settings."});
-            }
             if(!user.email.verificationCode){
                 return res.status(401).json({error: "You don't have a verification code for this email."});
             }
             const { verificationCode } = req.body;
             if(verificationCode !== user.email.verificationCode){
-                return res.status(401).json({noMatch: "The code didn't match."});
+                return res.status(401).json({codeSent: true, noMatch: "The code didn't match."});
             }
+            user.email.verified = true;
+            await user.save();
             return res.status(200).json({success: 'Your email is verified!'});
         }catch(error){
             generalErrorHandler(error, res);
