@@ -41,7 +41,7 @@ const router = createBrowserRouter(
           <Route path='logout' element={<Logout />} action={logoutAction} />
           <Route path='password' element={<Password />} action={passwordAction} />
           <Route path='verify-email' element={<VerifyEmail />} action={verifyEmailAction} />
-          <Route path='add-email' element={<Email />} action={EmailAction} />
+          <Route path='change-email' element={<Email />} action={EmailAction} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>

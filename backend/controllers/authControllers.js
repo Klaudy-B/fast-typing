@@ -21,7 +21,7 @@ module.exports.checkLoginStateController = async (req, res)=>{
             }
             return decodedToken;
         });
-        const user = await User.findOne({_id: decodedToken.id}).select('username');
+        const user = await User.findOne({_id: decodedToken.id}).select('username email');
         if(!user){
             setCookie(res, 'fasttyping', '', 1);
             throw { errorMessage:'Token not valid.'};
@@ -42,7 +42,7 @@ module.exports.signupController = async (req, res)=>{
         const user = await User.create(body);
         const token = createToken(user._id);
         setCookie(res, 'fasttyping', token);
-        return res.status(201).json({success: 'Your account have been created successfully.'});
+        return res.status(201).json({success: 'Your account has been created successfully.'});
     }catch(error){
         signupErrorHandler(error, res);
     }
@@ -117,7 +117,7 @@ module.exports.changePasswordController = async (req, res)=>{
     }
 }
 
-module.exports.changeEmailcontroller = async (req, res)=>{
+module.exports.changeEmailController = async (req, res)=>{
     try{
         const { email, password } = req.body;
         const user = await User.findOne({ username: req.username });
@@ -137,34 +137,30 @@ module.exports.changeEmailcontroller = async (req, res)=>{
     }
 }
 module.exports.verifyEmailController = async (req, res)=>{
-    if(req.method === 'get'){
+    if(req.method === 'GET'){
         try{
             const user = await User.findOne({ username: req.username });
             let verificationCode = '';
             for(let i=0; i<4; i++){
-                verificationCode += Math.round( Math.random()*10 );
+                verificationCode += Math.round( Math.random()*9 );
             }
             user.email.verificationCode = verificationCode;
             await user.save();
-            createTransport(
+            const transporter = createTransport(
                 {
                     service: 'gmail',
                     auth: {
                         user: 'fasttypingaddress@gmail.com',
-                        pass: 'fasttypingadmin'
+                        pass: 'hjmapqpeaefrvdhi'
                     }
                 }
-            ).sendMail(
+            )
+            await transporter.sendMail(
                 {
                     from: 'fasttypingaddress@gmail.com',
                     to: `${user.email.value}`,
                     subject: 'Your email verification code',
-                    text: `${verificationCode} is your fast-typing email verification code. This code will expire in 10 minutes.`
-                }, (error, info)=>{
-                    if(error){
-                        throw error;
-                    }
-                    return;
+                    html: `<b>${verificationCode}</b> is your fast-typing email verification code. This code will expire in 10 minutes.`
                 }
             )
             const emailToken = createToken(user.email.value);
@@ -174,7 +170,7 @@ module.exports.verifyEmailController = async (req, res)=>{
             generalErrorHandler(error, res);
         }
     }
-    if(req.method === 'post'){
+    if(req.method === 'POST'){
         try{
             if(!req.cookies.fasttypingemailverification){
                 return res.status(401).json({error: 'The code has expired.'});
@@ -184,8 +180,8 @@ module.exports.verifyEmailController = async (req, res)=>{
                 return res.status(401).json({error: "You don't have a verification code for this email."});
             }
             const { verificationCode } = req.body;
-            if(verificationCode !== user.email.verificationCode){
-                return res.status(401).json({codeSent: true, noMatch: "The code didn't match."});
+            if(Number(verificationCode) !== user.email.verificationCode){
+                return res.status(401).json({codeSent: true, noMatch: "The code doesn't match."});
             }
             user.email.verified = true;
             await user.save();

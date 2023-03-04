@@ -145,6 +145,7 @@ export const EmailAction = async ({ request })=>{
 export const verifyEmailAction = async ({ request })=>{
     const button = document.querySelector('form > button');
     button.disabled = true;
+    console.log(button.innerText)
     if(button.innerText === 'Submit'){
         button.innerText = 'Please wait...';
         const formData = await request.formData();
