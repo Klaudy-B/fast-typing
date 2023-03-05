@@ -10,13 +10,13 @@ const levelSchema = new Schema(
 
 module.exports.User = new model('user', Schema(
         {
-            username: {type: String, required: true},
+            username: {type: String, unique: true},
             password: String,
-            email:{
-                value: String,
-                verified: Boolean,
-                verificationCode: Number,
-            },
+            email: String,
+            verified: Boolean,
+            emailCode: {value: Number, updatedAt: {type: Date, default: ()=> Date.now()}},
+            recoveryCode: {value: Number, updatedAt: {type: Date, default: ()=> Date.now()}},
+            recoveryAuthorized: {value: Boolean, updatedAt: {type: Date, default: ()=> Date.now()}},
             easy: levelSchema,
             medium: levelSchema,
             hard: levelSchema
