@@ -15,13 +15,13 @@ module.exports.setCookie = (res, key, value, maxAge)=>{
 module.exports.userValidator = (username, password1, password2, email)=>{
     let errorFields = {username: '', password1: '', password2: '', email: ''};
     if(!username){
-        errorFields.username = 'The username field is required.';
+        errorFields.username = 'The username is required.';
     }
     if(!password1){
-        errorFields.password1 = 'The password field is required.';
+        errorFields.password1 = 'The password is required.';
     }
     if(!email){
-        errorFields.email = 'The email field is required.';
+        errorFields.email = 'The email is required.';
     }
     if(errorFields.username || errorFields.password1 || errorFields.email){
         throw { errorFields };
@@ -31,13 +31,13 @@ module.exports.userValidator = (username, password1, password2, email)=>{
         errorFields.email = `${email} is not a valide email.`;
     }
     if(password1.length<4){
-        errorFields.password1 = 'Password must have at least 4 characters.';
+        errorFields.password1 = 'The password must have at least 4 characters.';
     }
     if(errorFields.password1|| errorFields.email){
         throw { errorFields };
     }
     if(password1 !== password2){
-        errorFields.password2 = 'Password confirmation does not match the password field.';
+        errorFields.password2 = 'The password confirmation does not match the password you provided.';
     }
     if(errorFields.password2){
         throw { errorFields };

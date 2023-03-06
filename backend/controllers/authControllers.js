@@ -1,7 +1,7 @@
-const { User } = require('../models/models');
+const { User } = require('../models');
 const { verify } = require('jsonwebtoken');
 const { genSalt, hash, compare } = require('bcrypt');
-const { createToken, userValidator, setCookie } = require('../helpers/helpers');
+const { createToken, userValidator, setCookie } = require('../helpers');
 const {
     signupErrorHandler,
     generalErrorHandler,

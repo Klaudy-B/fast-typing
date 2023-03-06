@@ -11,7 +11,7 @@ const app = express();
 app.use(
     cors(
         {
-            origin: ['http://localhost:5173'],
+            origin: [process.env.FRONTEND],
             methods: ['GET', 'POST', 'DELETE', 'PATCH'],
             credentials: true
         }
@@ -20,10 +20,11 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 set('strictQuery', false);
-connect(process.env.URI,
+connect(
+    process.env.URI,
     ()=>{
         console.log('Connected to the database.'); 
-        app.listen(  process.env.PORT, ()=>{ console.log(`Server listening on port ${process.env.PORT}`); }  )
+        app.listen(process.env.PORT, ()=>{ console.log(`Server listening on port ${process.env.PORT}`); }   );
     },
     (error)=>{ console.log(error); }
 )
@@ -31,5 +32,5 @@ connect(process.env.URI,
 app.use('/auth', authRouter);
 app.use('/records', recordsRouter);
 app.use('/words', wordsRouter);
-app.use('*', (req, res)=>res.status(404).json({errorMessage: 'Resources not found.'}));
+app.use('*', (req, res)=>res.status(404).json({error: 'Resources not found.'})  );
 

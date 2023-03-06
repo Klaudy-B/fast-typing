@@ -1,6 +1,6 @@
 const { generalErrorHandler } = require('./errorhandlers/authErrorHandlers');
-const { setCookie } = require('./helpers/helpers');
-const { User } = require('./models/models');
+const { setCookie } = require('./helpers');
+const { User } = require('./models');
 const { verify } = require('jsonwebtoken');
 
 const verifyUser = async (req, res, next)=>{
@@ -11,7 +11,7 @@ const verifyUser = async (req, res, next)=>{
         const decodedToken = verify(req.cookies.fasttyping, process.env.SECRETSTRING, (error, decodedToken)=>{
                 if(error){
                     setCookie(res, 'fasttyping', '', 1);
-                    return res.status(500).end();
+                    return res.status(401).end();
                 }
                 return decodedToken;
             }
@@ -19,7 +19,7 @@ const verifyUser = async (req, res, next)=>{
         const user = await User.findOne({_id: decodedToken.id}).select('username');
         if(!user){
             setCookie(res, 'fasttyping', '', 1);
-            return res.status(401).end();;
+            return res.status(401).end();
         }
         setCookie(res, 'fasttyping', req.cookies.fasttyping);
         req.username = user.username;
@@ -34,13 +34,14 @@ const forgotPasswordMiddleware = (req, res, next)=>{
         if(req.cookies&&req.cookies.fasttypingloginusername){
             const {id: username} = verify(req.cookies.fasttypingloginusername, process.env.SECRETSTRING, (error, decodedToken)=>{
                 if(error){
-                    throw error;
+                    setCookie(res, 'fasttypingloginusername', '', 1);
+                    return res.status(401).end();
                 }
                 return decodedToken;
             })
             const user = User.findOne({username});
             if(!user){
-                throw {error: `No user named ${username}`};
+                throw {error: `There is no user named ${username}`};
             }
             req.username = user.username;
             next();

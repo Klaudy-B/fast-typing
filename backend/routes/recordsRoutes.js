@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const { getRecord, setRecord } = require('../controllers/recordsControllers');
 const { verifyUser } = require('../middlewares');
+const { getRecord, setRecord } = require('../controllers/recordsControllers');
 
 router.use(verifyUser);
 

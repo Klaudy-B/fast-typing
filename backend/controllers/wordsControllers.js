@@ -1,5 +1,5 @@
-const { Word } = require('../models/models');
-const { wordsTotalNumber } = require('../helpers/helpers');
+const { Word } = require('../models');
+const { wordsTotalNumber } = require('../helpers');
 const { generalErrorHandler } = require('../errorhandlers/authErrorHandlers');
 
 const getWords = async (req, res)=>{

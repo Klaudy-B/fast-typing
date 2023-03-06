@@ -1,5 +1,5 @@
 const { generalErrorHandler } = require('../errorhandlers/authErrorHandlers');
-const { User } = require('../models/models');
+const { User } = require('../models');
 
 module.exports.getRecord = async (req, res)=>{
     try{

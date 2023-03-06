@@ -1,6 +1,6 @@
 const router = require('express').Router();
-const getWords = require('../controllers/wordsControllers');
 const { verifyUser } = require('../middlewares');
+const getWords = require('../controllers/wordsControllers');
 
 router.use(verifyUser);
 

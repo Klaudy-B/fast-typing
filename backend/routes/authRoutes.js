@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { verifyUser, forgotPasswordMiddleware } = require('../middlewares')
+const { verifyUser, forgotPasswordMiddleware } = require('../middlewares');
 const {
     loginController,
     signupController,
@@ -14,6 +14,10 @@ const {
     forgotUsernameController
 } = require('../controllers/authControllers');
 
+router.get('/check-login-state', checkLoginStateController);
+router.get('/verify-email', verifyUser, verifyEmailController);
+router.get('/forgot-password', forgotPasswordMiddleware, forgotPasswordController);
+router.get('/logout', logoutController);
 
 router.post('/login', loginController);
 router.post('/signup', signupController);
@@ -21,11 +25,6 @@ router.post('/verify-email', verifyUser, verifyEmailController);
 router.post('/forgot-password', forgotPasswordMiddleware, forgotPasswordController);
 router.post('/recover-password', forgotPasswordMiddleware, recoverPasswordController);
 router.post('/forgot-username', forgotUsernameController);
-
-router.get('/check-login-state', checkLoginStateController);
-router.get('/verify-email', verifyUser, verifyEmailController);
-router.get('/forgot-password', forgotPasswordMiddleware, forgotPasswordController);
-router.get('/logout', logoutController);
 
 router.patch('/change-username', verifyUser, changeUsernameController);
 router.patch('/change-password', verifyUser, changePasswordController);
