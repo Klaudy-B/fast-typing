@@ -22,7 +22,7 @@ const getWords = async (req, res)=>{
             break;
 
         default:
-            res.status(404).json({errorMessage: 'Resource not found.'})
+            res.status(404).json({error: 'Resource not found.'});
     }
     try{
         let helperstring = '';

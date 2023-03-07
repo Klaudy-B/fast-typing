@@ -21,10 +21,10 @@ module.exports.checkLoginStateController = async (req, res)=>{
             }
             return decodedToken;
         });
-        const user = await User.findOne({_id: decodedToken.id}).select('username email');
+        const user = await User.findOne({_id: decodedToken.id}).select('username verified');
         if(!user){
             setCookie(res, 'fasttyping', '', 1);
-            throw { errorMessage:'Token not valid.'};
+            throw { error:'Token not valid.'};
         }
         setCookie(res, 'fasttyping', req.cookies.fasttyping);
         return res.status(200).json({ user: user.username, verified: user.verified});
@@ -65,7 +65,7 @@ module.exports.loginController = async (req, res)=>{
         if(username){
             const user = await User.findOne({ username });
             if(!user){
-                throw {errorFields:{username: `No user named ${username}`}};
+                throw {errorFields:{username: `There is no user named ${username}.`}};
             }
             const Token = createToken(username);
             setCookie(res, 'fasttypingloginusername', Token, 'session');
@@ -80,11 +80,11 @@ module.exports.loginController = async (req, res)=>{
             })
             const user = User.findOne({username});
             if(!user){
-                throw {error: `No user named ${username}`};
+                throw {error: `There is no user named ${username}.`};
             }
             const auth = await compare(password, user.password);
             if(!auth){
-                throw {errorFields:{password: 'Incorrect password'}};
+                throw {errorFields:{password: 'Incorrect password.'}};
             }
             const token = createToken(user._id);
             setCookie(res, 'fasttyping', token);
@@ -116,7 +116,7 @@ module.exports.changeUsernameController = async (req, res)=>{
             throw{errorFields: {password: 'Incorrect password.'}};
         }
         if(!username){
-            throw {errorFields: {username: 'You have to provide a new username if you want to change yours.'}}
+            throw {errorFields: {username: 'You have to provide a new username if you want to change yours.'}};
         }
         user.username = username;
         await user.save();
@@ -131,16 +131,16 @@ module.exports.changePasswordController = async (req, res)=>{
         const user = await User.findOne({ username: req.username });
         const auth = await compare(password1, user.password);
         if(!auth){
-            throw {errorFields: {password1: 'Incorrect password.'} }
+            throw {errorFields: {password1: 'Incorrect password.'} };
         }
         if(!password2){
             throw {errorFields: {password2: 'You have to provide a new password if you want to change yours.'} };
         }
         if(password2.length<4){
-            throw { errorFields: {password2: 'The password must have at least 4 characters.'} }
+            throw { errorFields: {password2: 'The password must have at least 4 characters.'} };
         }
         if(password3 !== password2){
-            throw { errorFields: {password3: 'The password confirmation field does not match.'} }
+            throw { errorFields: {password3: 'The password confirmation does not match the password you provided.'} };
         }
         const salt = await genSalt(10);
         user.password = await hash(password2, salt);
@@ -291,13 +291,14 @@ module.exports.recoverPasswordController = async (req, res)=>{
             throw {errorFields: {password2: 'You have to provide a new password if you want to change yours.'} };
         }
         if(password2.length<4){
-            throw { errorFields: {password2: 'The password must have at least 4 characters.'} }
+            throw { errorFields: {password2: 'The password must have at least 4 characters.'} };
         }
         if(password3 !== password2){
-            throw { errorFields: {password3: 'The password confirmation field does not match.'} }
+            throw { errorFields: {password3: 'The password confirmation does not match the password you provided.'} };
         }
         const salt = await genSalt(10);
         user.password = await hash(password2, salt);
+        user.recoveryAuthorized = false;
         await user.save();
         return res.status(201).json({success: 'Your password has been changed successfully.'});
     }catch(error){

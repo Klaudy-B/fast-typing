@@ -41,7 +41,7 @@ const forgotPasswordMiddleware = (req, res, next)=>{
             })
             const user = User.findOne({username});
             if(!user){
-                throw {error: `There is no user named ${username}`};
+                throw {error: `There is no user named ${username}.`};
             }
             req.username = user.username;
             next();
