@@ -5,7 +5,7 @@ const Signup = () => {
     const data = useActionData();
     if(data&&data.success){
         return <div className="success-message">
-            {data.success} Click <Link to='/settings/verify-email'>here</Link> to verify your email.<br />
+            {data.success} Click <Link to='/settings/verify-email'>here</Link> to verify your email. You can do it later in settings/verify my email.<br />
             <Link to='/'>I will do it later</Link>
         </div>
     }

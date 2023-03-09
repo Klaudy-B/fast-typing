@@ -21,7 +21,7 @@ module.exports.checkLoginStateController = async (req, res)=>{
             }
             return decodedToken;
         });
-        const user = await User.findOne({_id: decodedToken.id}).select('username verified');
+        const user = await User.findOne({_id: decodedToken.id}).select('username verified email');
         if(!user){
             setCookie(res, 'fasttyping', '', 1);
             throw { error:'Token not valid.'};
@@ -44,7 +44,7 @@ module.exports.signupController = async (req, res)=>{
             easy: {value: 0},
             medium: {value: 0},
             hard: {value: 0},
-            email: email,
+            email,
             verified: false,
             emailCode: 0,
             recoveryCode: 0,
@@ -72,15 +72,15 @@ module.exports.loginController = async (req, res)=>{
             return res.status(200).json({password: true});
         }
         if(req.cookies&&req.cookies.fasttypingloginusername){
-            const {id: username} = verify(req.cookies.fasttypingloginusername, process.env.SECRETSTRING, (error, decodedToken)=>{
+            const {id: theusername} = verify(req.cookies.fasttypingloginusername, process.env.SECRETSTRING, (error, decodedToken)=>{
                 if(error){
                     throw error;
                 }
                 return decodedToken;
             })
-            const user = User.findOne({username});
+            const user = await User.findOne({username: theusername});
             if(!user){
-                throw {error: `There is no user named ${username}.`};
+                throw {error: `There is no user named ${theusername}.`};
             }
             const auth = await compare(password, user.password);
             if(!auth){
@@ -94,7 +94,7 @@ module.exports.loginController = async (req, res)=>{
             return res.status(401).json({error: 'Your session expired.' });
         }
     }catch(error){
-        generalErrorHandler(error, res);
+        signupErrorHandler(error, res);
     }
 }
 
@@ -328,6 +328,7 @@ module.exports.deleteAccountController = async (req, res)=>{
             return res.status(401).json({errorFields: {password: 'Incorrect password.'}});
         }
         await User.findOneAndDelete({username: user.username});
+        setCookie(res, 'fasttyping', '', 1);
         return res.status(200).json({success: 'Your account has been deleted successfully.'});
    }catch(error){
     generalErrorHandler(error, res);

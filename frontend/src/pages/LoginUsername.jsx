@@ -10,13 +10,13 @@ const LoginUsername = () => {
         throw Error(data.error);
     }
         return <>
-        <Form method="post" action="/login/">
+        <Form method="post" action="/login/username">
             <label>Username:</label>
             <input type="text" name="username" required />
             {data&&data.errorFields&&<div className="error-message">{data.errorFields.username}</div>}
             <button>Continue</button>
         </Form>
-        <Link to='/settings/forgot-username'>I forgot my username</Link>
+        <Link to='/forgot-username'>I forgot my username</Link>
         </>
 }
  

@@ -17,13 +17,13 @@ const NavbarAndLayout = () => {
           }
           {!data.user && 
             <div>
-              <Link to="login">Log in</Link>
+              <Link to="login/username">Log in</Link>
               <Link to="signup">Sign up</Link>
             </div>
           }
         </nav>
       </div>
-      <Link to='my-records'>My records</Link>
+      {data.user&&<Link to='my-records'>My records</Link>}
     </header>
     {data.error&& <div className="error-message">{ data.error }</div>}
       <UserContext.Provider value={{user: data.user, verified: data.verified, email: data.email}}>

@@ -1,38 +1,40 @@
 import { useEffect, useReducer } from "react";
 import { reducer } from "../scripts/helpers";
 import formatDistanceToNow from "date-fns/formatDistanceToNow"
-import Loading from "./Loading";
+import Loading from "../components/Loading";
 
 const MyRecords = () => {
-    const [ records, dispatch ] = useReducer(reducer, {});
+    document.title = 'My records';
+    const [ records, dispatch ] = useReducer(reducer, {loading: true});
     useEffect(
         ()=>{
             fetch(`${import.meta.env.VITE_BACKEND}/records/my-records`, {
                 credentials: 'include'
             })
             .then(res=>res.json())
-            .then(data=>dispatch(data))
+            .then(data=>dispatch({...data, loading: false}))
+            .catch(error=>dispatch({error: error.message, loading: false}))
         },
         []
     )
     if(records.error){
         throw Error(error);
     }
-    if(!records){
+    if(records.loading){
         return <Loading />
     }
     return <div className="records">
         <ul>
             <li>
-                Easy: {records.easy.value}<br />
+                Easy: {records.easy.value} character{records.easy.value>1?'s': ''} by second<br />
                 Registered: {formatDistanceToNow(new Date(records.easy.updatedAt), {addSuffix: true})}
             </li>
             <li>
-                Medium: {records.medium.value}<br />
+                Medium: {records.medium.value} character{records.medium.value>1?'s': ''} by second<br />
                 Registered: {formatDistanceToNow(new Date(records.medium.updatedAt), {addSuffix: true})}
             </li>
             <li>
-                Hard: {records.hard.value}<br />
+                Hard: {records.hard.value} character{records.hard.value>1?'s': ''} by second<br />
                 Registered: {formatDistanceToNow(new Date(records.hard.updatedAt), {addSuffix: true})}
             </li>
         </ul>

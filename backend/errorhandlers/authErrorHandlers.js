@@ -12,6 +12,9 @@ module.exports.signupErrorHandler = (error, response)=>{
     if(error.errorFields){
         return response.status(400).json(error);
     }
+    if(error.error){
+        return response.status(400).json(error);
+    }
     console.log(error);
     return response.status(500).end();
 }

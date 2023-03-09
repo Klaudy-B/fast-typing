@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { useActionData, Form } from "react-router-dom";
+import { useActionData, Form, Link } from "react-router-dom";
 import { UserContext } from "../context";
 
 const VerifyEmail = () => {
@@ -18,7 +18,11 @@ const VerifyEmail = () => {
         <button>Submit</button>
         {data.noMatch&&<div className="error-message">{data.noMatch}</div>}
         </>}
-        {data&&data.success&&<div className="success-message">{data.success}</div>}
+        {data&&data.success&&
+        <div className="success-message">
+            {data.success}<br />
+            <Link to='/'>Done</Link>
+            </div>}
         {data&&data.error&&<div className="error-message">{data.error}</div>}
     </Form>
 }

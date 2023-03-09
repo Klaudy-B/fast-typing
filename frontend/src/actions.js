@@ -4,7 +4,20 @@ export const action = async (initialString, loadingString, url, method, body)=>{
     const button = document.querySelector('form > button');
     button.disabled = true;
     button.innerText = loadingString;
-    const res = await fetch(url,{
+    let res;
+    if(method === 'GET'){
+        res = await fetch(url,{
+            method,
+            credentials: 'include',
+        })
+        if(res.status === 500){
+            throw Error(errorMessage);
+        }
+        button.disabled = false;
+        button.innerText = initialString;
+        return {ok: res.ok};
+    }
+    res = await fetch(url,{
         method,
         body: JSON.stringify(body),
         credentials: 'include',
@@ -84,7 +97,7 @@ export const signupAction = async ({ request })=>{
     return data;
 }
 export const logoutAction = async ()=>{
-    const data = await action('Log out', 'Logging out...', `${import.meta.env.VITE_BACKEND}/auth/logout`, 'GET', {});
+    const data = await action('Log out', 'Logging out...', `${import.meta.env.VITE_BACKEND}/auth/logout`, 'GET');
     return { ok: data.ok};
 }
 export const usernameAction = async ({ request })=>{

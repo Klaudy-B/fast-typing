@@ -4,7 +4,7 @@ const ForgotUsername = () => {
     const data = useActionData();
     return <>
     Type in the username you remember.
-    <Form method='post' action='/settings/forgot-username'>
+    <Form method='post' action='/forgot-username'>
         <input type="text" name="username" required />
         <button>Search for a match</button>
         {data&&<div>{data.length} Result{data.length>1?"s":""}:<br />
