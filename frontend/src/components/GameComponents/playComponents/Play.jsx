@@ -1,5 +1,6 @@
 import { useReducer, useContext } from "react";
 import { useParams } from "react-router-dom";
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { UserContext } from "../../../context";
 import {  useFetchRecordAndWords, useFetch } from "../../../hooks";
 import Loading from "../../Loading";
@@ -20,6 +21,9 @@ function Play() {
         <>{ state.record.value } {state.record.value>1 ?'characters':'character'} by second</>
         }
       </div>
+      <div className="record-date">Registered: {state.loading?<Loading />:
+        <>{formatDistanceToNow(new Date(state.record.updatedAt), { addSuffix: true})}</>
+        }</div>
         <PlayContent loading={state.loading} record={state.record&&state.record.value} charactersList={state.charactersList} seconds={state.seconds} level={useParams().level} />
       <button disabled={state.loading} onClick={()=>location.reload()}>Restart</button>
   </>
