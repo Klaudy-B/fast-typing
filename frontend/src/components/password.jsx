@@ -4,14 +4,15 @@ const Password = () => {
     const data = useActionData();
     return <>
     <Form method="post" action="/settings/password">
-        <label>Current password:</label>
-        <input type="password" name="current-password" required />
+        <label>Your current password:</label>
+        <input type="password" name="current-password" placeholder="Type in your current password here" required />
         {data&&data.errorFields&& <div className="error-message">{data.errorFields.password1}</div>}
-        <label>New password:</label>
-        <input type="password" name="new-password" required />
-        <label>confirm new password:</label>
+        <label>Your new password:</label>
+        <input type="password" name="new-password" placeholder="Type in your new password here" required />
         {data&&data.errorFields&& <div className="error-message">{data.errorFields.password2}</div>}
-        <input type="password" name="new-password-confirmation" required />
+        <label>Confirm your new password:</label>
+        <input type="password" name="new-password-confirmation" placeholder="Type in your new password again"
+        required />
         {data&&data.errorFields&& <div className="error-message">{data.errorFields.password3}</div>}
         <button>Change password</button>
         {data&&data.success&&<div className="success-message">{data.success}</div>}

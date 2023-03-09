@@ -7,7 +7,7 @@ const ForgotUsername = () => {
     <Form method='post' action='/settings/forgot-username'>
         <input type="text" name="username" required />
         <button>Search for a match</button>
-        {data&&<div>{data.length} Result{data.length>1?"s":""}:
+        {data&&<div>{data.length} Result{data.length>1?"s":""}:<br />
                 {data.map((username, index)=><div key={index}>{username.username}</div>)}
             </div>}
     </Form>

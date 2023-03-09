@@ -7,7 +7,6 @@ const Logout = () => {
     }
     return <Form method="post" action="/settings/logout">
     <button>Log out</button>
-    {data&&!data.ok&& <div>{logoutErrorMessage}</div>}
 </Form>
 }
  

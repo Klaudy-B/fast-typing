@@ -25,7 +25,19 @@ import ForgotPassword from './components/ForgotPassword';
 import RecoverPassword from './components/RecoverPassword';
 import ForgotUsername from './components/ForgotUsername';
 
-import { EmailAction, forgotPasswordAction, forgotUsernameAction, loginUsernameAction, loginPasswordAction, logoutAction, passwordAction, recoverPasswordAction, signupAction, usernameAction, verifyEmailAction } from './actions';
+import {
+  EmailAction,
+  forgotPasswordAction,
+  forgotUsernameAction,
+  loginUsernameAction,
+  loginPasswordAction,
+  logoutAction,
+  passwordAction,
+  recoverPasswordAction,
+  signupAction,
+  usernameAction,
+  verifyEmailAction
+} from './actions';
 
 import { checkLoginStateLoader } from './loaders';
 
@@ -37,7 +49,7 @@ const router = createBrowserRouter(
       <Route path='/' element={<NavbarAndLayout />} loader={checkLoginStateLoader} errorElement={<Oops />}>
         <Route index element={<Home />} />
         <Route path='levels' element={<Levels />} />
-        <Route path='login' element={<LoginUsername />} action={loginUsernameAction} errorElement={<Oops />} />
+        <Route path='login/username' element={<LoginUsername />} action={loginUsernameAction} />
         <Route path='login/password' element={<LoginPassword />} action={loginPasswordAction} />
         <Route path='signup' element={<Signup />} action={signupAction} />
         <Route path='play/:level' element={<Protected children={<Play />} />} />
@@ -48,10 +60,8 @@ const router = createBrowserRouter(
           <Route path='verify-email' element={<VerifyEmail />} action={verifyEmailAction} />
           <Route path='change-email' element={<Email />} action={EmailAction} />
           <Route path='forgot-username' element={<ForgotUsername />} action={forgotUsernameAction} />
-          <Route path='forgot-password' errorElement={<Oops />}>
-            <Route index element={<ForgotPassword />} action={forgotPasswordAction} />
-            <Route path='recover-password' element={<RecoverPassword />} action={recoverPasswordAction} />
-          </Route>
+          <Route path='forgot-password' element={<ForgotPassword />} action={forgotPasswordAction} />
+          <Route path='recover-password' element={<RecoverPassword />} action={recoverPasswordAction} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>

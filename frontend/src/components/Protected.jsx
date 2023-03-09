@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 const Protected = ({ children }) => {
     const { user } = useContext(UserContext);
     if(!user){
-        return <Navigate to='/login' />
+        return <Navigate to='/login/username' />
     }
     return children;
 }

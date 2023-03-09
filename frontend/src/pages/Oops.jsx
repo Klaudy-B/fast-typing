@@ -7,7 +7,7 @@ const Oops = () => {
         <h1>Oops!</h1>
         <h3>Something went wrong.</h3>
         <div className="error-message">{ error.message }</div>
-        <div>Back to the <Link to='/'>homepage</Link>.</div>
+        <div><Link to='/'>homepage</Link></div>
     </>
 }
  

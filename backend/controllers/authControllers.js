@@ -27,7 +27,7 @@ module.exports.checkLoginStateController = async (req, res)=>{
             throw { error:'Token not valid.'};
         }
         setCookie(res, 'fasttyping', req.cookies.fasttyping);
-        return res.status(200).json({ user: user.username, verified: user.verified});
+        return res.status(200).json({ user: user.username, verified: user.verified, email: user.email});
     }catch(error){
         generalErrorHandler(error, res);
     }

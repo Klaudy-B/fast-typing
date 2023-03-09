@@ -1,4 +1,4 @@
-import { Form, Link, useActionData } from "react-router-dom";
+import { Form, Link, useActionData, Navigate } from "react-router-dom";
 
 const LoginPassword = () => {
     const data = useActionData();
@@ -11,7 +11,7 @@ const LoginPassword = () => {
     return <>
     <Form method="post" action="/login/password">
         <label>Password:</label>
-        <input type="password" name="password" required />
+        <input type="password" name="password" placeholder="Type in your password here" required />
         {data&&data.errorFields&&<div className="error-message">{data.errorFields.password}</div>}
         <button>log in</button>
     </Form>

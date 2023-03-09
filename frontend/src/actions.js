@@ -1,15 +1,13 @@
 import { errorMessage } from "./scripts/helpers";
 
-export const loginUsernameAction = async ({ request })=>{
+export const action = async (request, initialString, loadingString, url, method, body)=>{
     const button = document.querySelector('form > button');
     button.disabled = true;
-    button.innerText = 'Please wait...';
+    button.innerText = loadingString;
     const formData = await request.formData();
-    const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/login`,{
-        method: request.method,
-        body: JSON.stringify({
-            username: formData.get('username'),
-        }),
+    const res = await fetch(url,{
+        method,
+        body: JSON.stringify(body),
         credentials: 'include',
         headers: {
             "content-type": "application/json"
@@ -20,159 +18,17 @@ export const loginUsernameAction = async ({ request })=>{
     }
     const data = await res.json();
     button.disabled = false;
-    button.innerText = 'Continue';
+    button.innerText = initialString;
     return data;
 }
-export const loginPasswordAction = async ({ request })=>{
-    const button = document.querySelector('form > button');
-    button.disabled = true;
-    button.innerText = 'Logging in...';
-    const formData = await request.formData();
-    const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/login`,{
-        method: request.method,
-        body: JSON.stringify({
-            password: formData.get('password'),
-        }),
-        credentials: 'include',
-        headers: {
-            "content-type": "application/json"
-        }
-    })
-    if(res.status === 500){
-        throw Error(errorMessage);
-    }
-    const data = await res.json();
-    button.disabled = false;
-    button.innerText = 'Log in';
-    return data;
-}
-
-export const signupAction = async ({ request })=>{
-    const button = document.querySelector('form > button');
-    button.disabled = true;
-    button.innerText = 'Signing up...';
-    const formData = await request.formData();
-    const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/signup`,{
-        method: request.method,
-        body: JSON.stringify({
-            username: formData.get('username'),
-            email: formData.get('email'),
-            password1: formData.get('password1'),
-            password2: formData.get('password2')
-        }),
-        credentials: 'include',
-        headers: {
-            "Content-Type": "application/json"
-        }
-    })
-    if(res.status === 500){
-        throw Error(errorMessage);
-    }
-    const data = await res.json();
-    button.disabled = false;
-    button.innerText = 'Sign in';
-    return data;
-}
-
-export const logoutAction = async ()=>{
-    const button = document.querySelector('form > button');
-    button.disabled = true;
-    button.innerText = 'Logging out...';
-    const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/logout`, {
-        credentials: 'include'
-    })
-    button.disabled = false;
-    button.innerText = 'Log out';
-    if(!res.ok){
-        throw Error(errorMessage);
-    }
-    return {ok: true};
-}
-
-export const usernameAction = async ({ request })=>{
-    const button = document.querySelector('form > button');
-    button.disabled = true;
-    button.innerText = 'Changing your username...';
-    const formData = await request.formData();
-    const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/change-username`,{
-        method: 'PATCH',
-        body: JSON.stringify({
-            username: formData.get('new-username'),
-            password: formData.get('password')
-        }),
-        credentials: 'include',
-        headers: {
-            "content-type": "application/json"
-        }
-    })
-    if(res.status === 500){
-        throw Error(errorMessage);
-    }
-    const data = await res.json();
-    button.disabled = false;
-    button.innerText = 'Change username';
-    return data;
-}
-
-export const passwordAction = async ({ request })=>{
-    const button = document.querySelector('form > button');
-    button.disabled = true;
-    button.innerText = 'Changing your password...';
-    const formData = await request.formData();
-    const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/change-password`,{
-        method: 'PATCH',
-        body: JSON.stringify({
-            password1: formData.get('current-password'),
-            password2: formData.get('new-password'),
-            password3: formData.get('new-password-confirmation')
-        }),
-        credentials: 'include',
-        headers: {
-            "content-type": "application/json"
-        }
-    })
-    if(res.status === 500){
-        throw Error(errorMessage);
-    }
-    const data = await res.json();
-    button.disabled = false;
-    button.innerText = 'Change password';
-    return data;
-}
-
-export const EmailAction = async ({ request })=>{
-    const button = document.querySelector('form > button');
-    button.disabled = true;
-    button.innerText = 'Changing email...';
-    const formData = await request.formData();
-    const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/change-email`,{
-        method: 'PATCH',
-        body: JSON.stringify({
-            email: formData.get('email'),
-            password: formData.get('password')
-        }),
-        credentials: 'include',
-        headers: {
-            "content-type": "application/json"
-        }
-    })
-    if(res.status === 500){
-        throw Error(errorMessage);
-    }
-    const data = await res.json();
-    button.disabled = false;
-    button.innerText = 'Change email';
-    return data;
-}
-
-export const verifyEmailAction = async ({ request })=>{
+export const verificationAction = async (request, verifyUrl, codeUrl)=>{
     const button = document.querySelector('form > button');
     button.disabled = true;
     if(button.innerText === 'Submit'){
         button.innerText = 'Please wait...';
         const formData = await request.formData();
-        const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/verify-email`,{
-            method: request.method,
+        const res = await fetch(verifyUrl,{
+            method: 'POST',
             body: JSON.stringify({
                 verificationCode: formData.get('verification-code')
             }),
@@ -191,7 +47,7 @@ export const verifyEmailAction = async ({ request })=>{
     }
     if(button.innerText === 'Send me the code'){
         button.innerText = 'Please wait...';
-        const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/verify-email`, {
+        const res = await fetch(codeUrl, {
             credentials: 'include'
         })
         if(res.status === 500){
@@ -203,88 +59,73 @@ export const verifyEmailAction = async ({ request })=>{
         return data;
     }
 }
-export const forgotPasswordAction = async ({ request })=>{
-    const button = document.querySelector('form > button');
-    button.disabled = true;
-    if(button.innerText === 'Submit'){
-        button.innerText = 'Please wait...';
-        const formData = await request.formData();
-        const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/forgot-password`,{
-            method: request.method,
-            body: JSON.stringify({
-                code: formData.get('code')
-            }),
-            credentials: 'include',
-            headers: {
-                "content-type": "application/json"
-            }
-        })
-        if(res.status === 500){
-            throw Error(errorMessage);
-        }
-        const data = await res.json();
-        button.disabled = false;
-        button.innerText = 'Submit';
-        return data;
-    }
-    if(button.innerText === 'Send me the code'){
-        button.innerText = 'Please wait...';
-        const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/forgot-password`, {
-            credentials: 'include'
-        })
-        if(res.status === 500){
-            throw Error(errorMessage);
-        }
-        const data = await res.json();
-        button.disabled = false;
-        button.innerText = 'Send me the code';
-        return data;
-    }
+
+export const loginUsernameAction = async ({ request })=>{
+    const data = await action(request, 'Continue', 'Please wait...', `${import.meta.env.VITE_BACKEND}/auth/login`, 'POST', {
+        username: formData.get('username'),
+    });
+    return data;
+}
+export const loginPasswordAction = async ({ request })=>{
+    const data = await action(request, 'Log in', 'Logging in...', `${import.meta.env.VITE_BACKEND}/auth/login`, 'POST', {
+        password: formData.get('password'),
+    });
+    return data;
+}
+export const signupAction = async ({ request })=>{
+    const data = await action(request, 'Sign up', 'Signing up...', `${import.meta.env.VITE_BACKEND}/auth/signup`, 'POST', {
+        username: formData.get('username'),
+        email: formData.get('email'),
+        password1: formData.get('password1'),
+        password2: formData.get('password2')
+    })
+    return data;
+}
+export const logoutAction = async ()=>{
+    const data = await action(request, 'Log out', 'Logging out...', `${import.meta.env.VITE_BACKEND}/auth/logout`, 'GET', {});
+    return { ok: data.ok};
+}
+export const usernameAction = async ({ request })=>{
+    const data = await action(request, 'Change username', 'Changing your username...', `${import.meta.env.VITE_BACKEND}/auth/change-username`, 'PATCH', {
+        username: formData.get('new-username'),
+        password: formData.get('password')
+    });
+    return data;
+}
+export const passwordAction = async ({ request })=>{
+    const data = await action(request, 'Change password', 'Changing your password...', `${import.meta.env.VITE_BACKEND}/auth/change-password`, 'PATCH', {
+        password1: formData.get('current-password'),
+        password2: formData.get('new-password'),
+        password3: formData.get('new-password-confirmation')
+    })
+    return data;
+}
+export const EmailAction = async ({ request })=>{
+    const data = await action(request, 'Change email', 'Changing email...', `${import.meta.env.VITE_BACKEND}/auth/change-email`, 'PATCH', {
+        email: formData.get('email'),
+        password: formData.get('password')
+    })
+    return data;
 }
 export const recoverPasswordAction = async ({ request })=>{
-    const button = document.querySelector('form > button');
-    button.disabled = true;
-    button.innerText = 'Changing your password...';
-    const formData = await request.formData();
-    const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/recover-password`,{
-        method: 'POST',
-        body: JSON.stringify({
-            password2: formData.get('new-password'),
-            password3: formData.get('new-password-confirmation')
-        }),
-        credentials: 'include',
-        headers: {
-            "content-type": "application/json"
-        }
+    const data = await action(request, 'Change password', 'Changing your password...', `${import.meta.env.VITE_BACKEND}/auth/recover-password`, 'POST', {
+        password2: formData.get('new-password'),
+        password3: formData.get('new-password-confirmation')
     })
-    if(res.status === 500){
-        throw Error(errorMessage);
-    }
-    const data = await res.json();
-    button.disabled = false;
-    button.innerText = 'Change password';
     return data;
 }
 export const forgotUsernameAction = async ({ request })=>{
-    const button = document.querySelector('form > button');
-    button.disabled = true;
-    button.innerText = 'Searching...';
-    const formData = await request.formData();
-    const res = await fetch(`${import.meta.env.VITE_BACKEND}/auth/forgot-username`,{
-        method: 'POST',
-        body: JSON.stringify({
-            username: formData.get('username'),
-        }),
-        credentials: 'include',
-        headers: {
-            "content-type": "application/json"
-        }
+    const data = await action(request, 'Search for a match', 'Searching...', `${import.meta.env.VITE_BACKEND}/auth/forgot-username`, 'POST', {
+        username: formData.get('username'),
     })
-    if(res.status === 500){
-        throw Error(errorMessage);
-    }
-    const data = await res.json();
-    button.disabled = false;
-    button.innerText = 'Search for a match';
+    return data;
+}
+
+export const verifyEmailAction = async ({ request })=>{
+    const data = await verificationAction(request, `${import.meta.env.VITE_BACKEND}/auth/verify-email`, `${import.meta.env.VITE_BACKEND}/auth/verify-email`);
+    return data;
+}
+export const forgotPasswordAction = async ({ request })=>{
+    const data = await verificationAction(request, `${import.meta.env.VITE_BACKEND}/auth/forgot-password`, `${import.meta.env.VITE_BACKEND}/auth/forgot-password`);
     return data;
 }
