@@ -11,7 +11,8 @@ const {
     verifyEmailController,
     forgotPasswordController,
     recoverPasswordController,
-    forgotUsernameController
+    forgotUsernameController,
+    deleteAccountController
 } = require('../controllers/authControllers');
 
 router.get('/check-login-state', checkLoginStateController);
@@ -29,5 +30,7 @@ router.post('/forgot-username', forgotUsernameController);
 router.patch('/change-username', verifyUser, changeUsernameController);
 router.patch('/change-password', verifyUser, changePasswordController);
 router.patch('/change-email', verifyUser, changeEmailController);
+
+router.delete('/delete-account', verifyUser, deleteAccountController);
 
 module.exports = router;

@@ -15,6 +15,7 @@ import Signup from './pages/Signup';
 import Protected from './components/Protected';
 import NavbarAndLayout from './components/NavbarAndLayout';
 import Play from './components/GameComponents/playComponents/Play';
+import MyRecords from './components/MyRecords';
 import Settings from './components/Settings';
 import Username from './components/Username';
 import Logout from './components/Logout';
@@ -24,8 +25,10 @@ import VerifyEmail from './components/VerifyEmail';
 import ForgotPassword from './components/ForgotPassword';
 import RecoverPassword from './components/RecoverPassword';
 import ForgotUsername from './components/ForgotUsername';
+import DeleteAccount from './components/DeleteAccount';
 
 import {
+  deleteAccountAction,
   EmailAction,
   forgotPasswordAction,
   forgotUsernameAction,
@@ -49,6 +52,7 @@ const router = createBrowserRouter(
       <Route path='/' element={<NavbarAndLayout />} loader={checkLoginStateLoader} errorElement={<Oops />}>
         <Route index element={<Home />} />
         <Route path='levels' element={<Levels />} />
+        <Route path='my-records' element={<MyRecords />} />
         <Route path='login/username' element={<LoginUsername />} action={loginUsernameAction} />
         <Route path='login/password' element={<LoginPassword />} action={loginPasswordAction} />
         <Route path='signup' element={<Signup />} action={signupAction} />
@@ -62,6 +66,7 @@ const router = createBrowserRouter(
           <Route path='forgot-username' element={<ForgotUsername />} action={forgotUsernameAction} />
           <Route path='forgot-password' element={<ForgotPassword />} action={forgotPasswordAction} />
           <Route path='recover-password' element={<RecoverPassword />} action={recoverPasswordAction} />
+          <Route path='delete-account' element={<DeleteAccount />} action={deleteAccountAction} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>

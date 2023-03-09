@@ -315,3 +315,21 @@ module.exports.forgotUsernameController = async (req, res)=>{
         generalErrorHandler(error, res);
     }
 }
+module.exports.deleteAccountController = async (req, res)=>{
+   try{
+        const { password } = req.body;
+        const user = await User.findOne({ username: req.username });
+        if(!user){
+            setCookie(res, 'fasttyping', '', 1);
+            return res.status(401).json({error: 'Unauthorized'});
+        }
+        const auth = compare(password, user.password);
+        if(!auth){
+            return res.status(401).json({errorFields: {password: 'Incorrect password.'}});
+        }
+        await User.findOneAndDelete({username: user.username});
+        return res.status(200).json({success: 'Your account has been deleted successfully.'});
+   }catch(error){
+    generalErrorHandler(error, res);
+   }
+}

@@ -19,6 +19,14 @@ module.exports.getRecord = async (req, res)=>{
         generalErrorHandler(error, res);
     }
 }
+module.exports.myRecordsController = async (req, res)=>{
+    try{
+        const records = await User.findOne({username: req.username}).select('easy medium hard -_id');
+        return res.status(200).json({easy: records.easy, medium: records.medium, hard: records.hard});
+    }catch(error){
+        generalErrorHandler(error, res);
+    }
+}
 
 module.exports.setRecord = async (req, res)=>{
     try{

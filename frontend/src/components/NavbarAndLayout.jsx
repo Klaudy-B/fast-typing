@@ -23,6 +23,7 @@ const NavbarAndLayout = () => {
           }
         </nav>
       </div>
+      <Link to='my-records'>My records</Link>
     </header>
     {data.error&& <div className="error-message">{ data.error }</div>}
       <UserContext.Provider value={{user: data.user, verified: data.verified, email: data.email}}>

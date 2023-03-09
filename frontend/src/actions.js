@@ -1,10 +1,9 @@
 import { errorMessage } from "./scripts/helpers";
 
-export const action = async (request, initialString, loadingString, url, method, body)=>{
+export const action = async (initialString, loadingString, url, method, body)=>{
     const button = document.querySelector('form > button');
     button.disabled = true;
     button.innerText = loadingString;
-    const formData = await request.formData();
     const res = await fetch(url,{
         method,
         body: JSON.stringify(body),
@@ -61,19 +60,22 @@ export const verificationAction = async (request, verifyUrl, codeUrl)=>{
 }
 
 export const loginUsernameAction = async ({ request })=>{
-    const data = await action(request, 'Continue', 'Please wait...', `${import.meta.env.VITE_BACKEND}/auth/login`, 'POST', {
+    const formData = await request.formData();
+    const data = await action('Continue', 'Please wait...', `${import.meta.env.VITE_BACKEND}/auth/login`, 'POST', {
         username: formData.get('username'),
     });
     return data;
 }
 export const loginPasswordAction = async ({ request })=>{
-    const data = await action(request, 'Log in', 'Logging in...', `${import.meta.env.VITE_BACKEND}/auth/login`, 'POST', {
+    const formData = await request.formData();
+    const data = await action('Log in', 'Logging in...', `${import.meta.env.VITE_BACKEND}/auth/login`, 'POST', {
         password: formData.get('password'),
     });
     return data;
 }
 export const signupAction = async ({ request })=>{
-    const data = await action(request, 'Sign up', 'Signing up...', `${import.meta.env.VITE_BACKEND}/auth/signup`, 'POST', {
+    const formData = await request.formData();
+    const data = await action('Sign up', 'Signing up...', `${import.meta.env.VITE_BACKEND}/auth/signup`, 'POST', {
         username: formData.get('username'),
         email: formData.get('email'),
         password1: formData.get('password1'),
@@ -82,18 +84,20 @@ export const signupAction = async ({ request })=>{
     return data;
 }
 export const logoutAction = async ()=>{
-    const data = await action(request, 'Log out', 'Logging out...', `${import.meta.env.VITE_BACKEND}/auth/logout`, 'GET', {});
+    const data = await action('Log out', 'Logging out...', `${import.meta.env.VITE_BACKEND}/auth/logout`, 'GET', {});
     return { ok: data.ok};
 }
 export const usernameAction = async ({ request })=>{
-    const data = await action(request, 'Change username', 'Changing your username...', `${import.meta.env.VITE_BACKEND}/auth/change-username`, 'PATCH', {
+    const formData = await request.formData();
+    const data = await action('Change username', 'Changing your username...', `${import.meta.env.VITE_BACKEND}/auth/change-username`, 'PATCH', {
         username: formData.get('new-username'),
         password: formData.get('password')
     });
     return data;
 }
 export const passwordAction = async ({ request })=>{
-    const data = await action(request, 'Change password', 'Changing your password...', `${import.meta.env.VITE_BACKEND}/auth/change-password`, 'PATCH', {
+    const formData = await request.formData();
+    const data = await action('Change password', 'Changing your password...', `${import.meta.env.VITE_BACKEND}/auth/change-password`, 'PATCH', {
         password1: formData.get('current-password'),
         password2: formData.get('new-password'),
         password3: formData.get('new-password-confirmation')
@@ -101,23 +105,34 @@ export const passwordAction = async ({ request })=>{
     return data;
 }
 export const EmailAction = async ({ request })=>{
-    const data = await action(request, 'Change email', 'Changing email...', `${import.meta.env.VITE_BACKEND}/auth/change-email`, 'PATCH', {
+    const formData = await request.formData();
+    const data = await action('Change email', 'Changing email...', `${import.meta.env.VITE_BACKEND}/auth/change-email`, 'PATCH', {
         email: formData.get('email'),
         password: formData.get('password')
     })
     return data;
 }
 export const recoverPasswordAction = async ({ request })=>{
-    const data = await action(request, 'Change password', 'Changing your password...', `${import.meta.env.VITE_BACKEND}/auth/recover-password`, 'POST', {
+    const formData = await request.formData();
+    const data = await action('Change password', 'Changing your password...', `${import.meta.env.VITE_BACKEND}/auth/recover-password`, 'POST', {
         password2: formData.get('new-password'),
         password3: formData.get('new-password-confirmation')
     })
     return data;
 }
 export const forgotUsernameAction = async ({ request })=>{
-    const data = await action(request, 'Search for a match', 'Searching...', `${import.meta.env.VITE_BACKEND}/auth/forgot-username`, 'POST', {
+    const formData = await request.formData();
+    const data = await action('Search for a match', 'Searching...', `${import.meta.env.VITE_BACKEND}/auth/forgot-username`, 'POST', {
         username: formData.get('username'),
     })
+    return data;
+}
+export const deleteAccountAction = async ({ request })=>{
+    const formData = await request.formData();
+    const body = {
+        password: formData.get('password')
+    }
+    const data = await action('Delete my account', 'Deleting account...', `${import.meta.env.VITE_BACKEND}/auth/delete-account`, 'DELETE', body);
     return data;
 }
 
