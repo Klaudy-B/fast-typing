@@ -1,14 +1,8 @@
-import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { UserContext } from "../context";
 
 const Levels = () => {
     document.title = 'Levels'
-    const { user } = useContext(UserContext);
-    return (
-    <div className="welcome">
-        <h1>{ user?`${user}, welcome` : 'Welcome' } to Fast-Typing!</h1>
-        <p>Measure your average typing speed with our web app and register personal records within three levels of difficulties.</p>
+    return<>
         <div className="levels">
             <h2>Levels</h2>
             <ul>
@@ -29,8 +23,7 @@ const Levels = () => {
                 </li>
             </ul>
         </div>
-    </div>
-    )
+    </>
 }
  
 export default Levels;

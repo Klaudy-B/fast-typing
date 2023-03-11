@@ -1,0 +1,55 @@
+$primary: aqua
+$secondary: rgba(gray, .5)
+@mixin button-style
+    border-radius: 5px
+    padding: 5px
+    background-color: $primary
+    color: black
+    text-decoration: none
+div.rapper
+  max-width: 33%
+
+span.incorrect
+  color: red
+  text-decoration: underline
+
+span.correct
+  color: #00FF00
+
+div.cheat
+  color: red
+  max-width: 100%
+
+span.error
+  color: red
+
+a
+  @include button-style
+a.home
+  @include button-style
+  background-color: inherit
+a:hover
+  background-color: gray
+.container
+  h1
+    margin: 0px
+    padding: 0px
+.home-container
+  display: flex
+  justify-content: space-between
+  flex-wrap: wrap
+nav
+  margin: auto 2px
+  @extend .home-container
+header
+  padding: 20px
+  background-color: $secondary
+  margin-bottom: 20px
+footer
+  margin-top: 20px
+  text-align: center
+li
+  background-color: rgba(gray, .2)
+  list-style-type: none
+  padding: 20px
+  margin: 5px auto

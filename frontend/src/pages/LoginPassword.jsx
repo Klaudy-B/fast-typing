@@ -15,6 +15,9 @@ const LoginPassword = () => {
         {data&&data.errorFields&&<div className="error-message">{data.errorFields.password}</div>}
         <button>log in</button>
     </Form>
+    <div className="signup">
+        Don't have an account yet? <Link to='/signup'>Sign up</Link>.
+    </div>
     <Link to='/settings/forgot-password'>I forgot my password</Link>
     </>
     

@@ -9,7 +9,7 @@ const Signup = () => {
             <Link to='/'>I will do it later</Link>
         </div>
     }
-    return (
+    return <>
         <Form method="post" action="/signup">
             <label>Username:</label>
             <input type="text" name="username" required />
@@ -31,7 +31,10 @@ const Signup = () => {
             }
             <button>Sign up</button>
         </Form>
-    )
+        <div className="signup">
+        Already have an account? <Link to='/login/username'>Log in</Link>.
+        </div>
+    </>
 }
  
 export default Signup;

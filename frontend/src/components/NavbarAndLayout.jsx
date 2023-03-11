@@ -5,10 +5,8 @@ const NavbarAndLayout = () => {
   const data = useLoaderData();
   return <>
     <header>
-      <div className="container">
-        <Link to="/">
-          <h1>Fast-Typing</h1>
-        </Link>
+      <div className="home-container">
+          <h1><Link to="/" className="home">Fast-Typing</Link></h1>
         <nav>
           {data.user && <>
               <span>{data.user}</span>
