@@ -22,7 +22,8 @@ const VerifyEmail = () => {
         <div className="success-message">
             {data.success}<br />
             <Link to='/'>Done</Link>
-            </div>}
+        </div>
+        }
         {data&&data.error&&<div className="error-message">{data.error}</div>}
     </Form>
 }

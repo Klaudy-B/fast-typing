@@ -18,6 +18,7 @@ const LoginPassword = () => {
     <div className="signup">
         Don't have an account yet? <Link to='/signup'>Sign up</Link>.
     </div>
+    <br />
     <Link to='/settings/forgot-password'>I forgot my password</Link>
     </>
     

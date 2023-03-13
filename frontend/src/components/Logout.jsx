@@ -6,6 +6,7 @@ const Logout = () => {
         return <Navigate to='/' replace={true} />
     }
     return <Form method="post" action="/settings/logout">
+        <span>Click the <b>Log out</b> button below to log out.</span>
     <button>Log out</button>
 </Form>
 }

@@ -34,22 +34,9 @@ module.exports.setRecord = async (req, res)=>{
             return res.status(404).json({error: 'Resource not found.'});
         }
         const user = await User.findOne({username: req.username});
-        switch(req.params.level){
-            case 'easy':
-                user.easy = {value: req.body.newRecord};
-                await user.save();
-                return res.status(201).json(user.easy);
-
-            case 'medium':
-                user.medium = {value: req.body.newRecord};
-                await user.save();
-                return res.status(201).json(user.medium);
-
-            case 'hard':
-                user.hard = {value: req.body.newRecord};
-                await user.save();
-                return res.status(201).json(user.hard);
-        }
+        user[req.params.level] = {value: req.body.newRecord};
+        await user.save();
+        return res.status(201).json(user[req.params.level]);
     }catch(error){
         generalErrorHandler(error, res);
     }

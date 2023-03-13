@@ -7,7 +7,7 @@ const DeleteAccount = () => {
     const [rerender, setRerender] = useState(false);
     if(rerender){
         return <Form className="delete-account-form" method="post" action="/settings/delete-account">
-        <label>Type in your password:</label><br />
+        <label>Type in your password:</label>
         <input type="password" name="password" required />
         {data&&data.errorFields&&<div className="error-message">{data.errorFields.password}</div>}
         <button>Delete my account</button>

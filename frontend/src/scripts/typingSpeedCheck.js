@@ -4,8 +4,8 @@ const calculateSpeedAtComplet = (characters, time, error, record, setNewRecord)=
     .querySelector('div.completion-message')
     .innerHTML =
     `<span class=${error?"error" : "correct"}>Completed</span><br />
-    Errors:${error? '<span class="error">'+String(error)+'</span>' : '<span class="correct">0</span>'}<br />
-    Average speed: ${speed}${speed>1?' characters':' character'} by second
+    <b>Errors: </b>${error? '<span class="error">'+String(error)+'</span>' : '<span class="correct">0</span>'}<br />
+    <b>Average speed: </b><span class="${error? 'error': 'correct'}">${speed}</span>${speed>1?' characters':' character'} by second
     ${(error&&(speed>record))? '<br /><span class="error">Record not registered, because "Errors is not equal to 0"</span>': ''}`;
     
     if(speed>record&&!error){
@@ -19,8 +19,8 @@ const calculateSpeedAtTimeup = (time)=>{
     .querySelector('div.completion-message')
     .innerHTML =
     `Time's up!<br />
-    Errors:<span class="error">${document.querySelectorAll('span.incorrect').length}</span><br />
-    Average speed: ${speed}${speed>1?' characters':' character'} by second`;
+    <b>Errors: </b>:<span class="error">${document.querySelectorAll('span.incorrect').length}</span><br />
+    <b>Average speed: </b><span class="error">${speed}</span>${speed>1?' characters':' character'} by second`;
 }
 
 const evaluate = function (e, preInput, setBlock, seconds, record, setNewRecord){

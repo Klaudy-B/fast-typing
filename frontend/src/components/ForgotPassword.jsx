@@ -7,11 +7,11 @@ const ForgotPassword = () => {
     const data = useActionData();
     if(!data&&user&&!verified){
         return <div className="success-message">
-        Your email is not verified. Click <Link to='/settings/verify-email'>here</Link> to verify your email first.
+        <span>Your email is not verified. Click <Link to='/settings/verify-email'>here</Link> to verify your email first.</span>
         </div>
     }
     if(data&&data.authorized){
-        <Navigate to='/settings/recover-password' />
+        return <Navigate to='/settings/recover-password' />
     }
     return <Form method="post" action="/settings/forgot-password">
     {!data&&<>
@@ -19,7 +19,7 @@ const ForgotPassword = () => {
     Once you recieve the code, you will be prompt to type it in.
     <button>Send me the code</button></>}
     {data&&data.codeSent&&<>
-    <input type="text" name="code" placeholder="Type in the code you recieved here" required /><br />
+    <input type="text" name="verification-code" placeholder="Type in the code you recieved here" required /><br />
     <button>Submit</button>
     {data.noMatch&&<div className="error-message">{data.noMatch}</div>}
     </>}

@@ -10,11 +10,11 @@ const PlayContent = ({ loading, record, charactersList, level, seconds })=>{
   const [ block, setBlock ] = useState(false);
   const [ start, setStart ] = useState(false);
   const preInput = useRef('');
-  return <>
+  return <div className="play">
     <Countdown setStart={ setStart } loading={loading} />
     {start&&!block &&<div className="go">Go!</div>}
     <Timer block={block} setBlock={setBlock} seconds={seconds} start={start} />
-    <div className="rapper">
+    <div className="wrapper">
       <div className="text-displayer">
       {charactersList&&start&&charactersList.map( (character, index)=> <span key={index}>{character}</span> )}
       </div>
@@ -31,7 +31,7 @@ const PlayContent = ({ loading, record, charactersList, level, seconds })=>{
       <div className="completion-message"></div>
     </div>
     {<NewRecord record={newRecord} level={level} start={start} />}
-  </>
+  </div>
 }
  
 export default PlayContent;

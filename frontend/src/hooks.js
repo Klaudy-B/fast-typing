@@ -19,7 +19,7 @@ export const useFetchRecordAndWords = async (level, dispatch)=>{
         const data = await res.json();
         return dispatch({ record, charactersList: data.charactersList, seconds: data.seconds, loading: false});
     }catch(error){
-        return dispatch({ error: errorMessage, loading: true});
+        return dispatch({ error: error.message, loading: true});
     }
 }
 export const useFetchNewRecord = async(level, dispatch, record)=>{
@@ -35,7 +35,7 @@ export const useFetchNewRecord = async(level, dispatch, record)=>{
         }
         return dispatch({rerender: true});
        }catch(error){
-        return dispatch({error: errorMessage, rerender: false});
+        return dispatch({error: error.message, rerender: false});
        }
 }
 export const useFetch = (error, level, dispatch, callBack)=>{

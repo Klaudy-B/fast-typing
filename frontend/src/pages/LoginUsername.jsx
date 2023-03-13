@@ -13,12 +13,13 @@ const LoginUsername = () => {
         <Form method="post" action="/login/username">
             <label>Username:</label>
             <input type="text" name="username" required />
-            {data&&data.errorFields&&<div className="error-message">{data.errorFields.username}</div>}
+            {data&&data.errorFields&&data.errorFields.username&&<div className="error-message">{data.errorFields.username}</div>}
             <button>Continue</button>
         </Form>
         <div className="signup">
         Don't have an account yet? <Link to='/signup'>Sign up</Link>.
         </div>
+        <br />
         <Link to='/forgot-username'>I forgot my username</Link>
         </>
 }

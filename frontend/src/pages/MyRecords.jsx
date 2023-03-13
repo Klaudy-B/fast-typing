@@ -18,7 +18,7 @@ const MyRecords = () => {
         []
     )
     if(records.error){
-        throw Error(error);
+        throw Error(records.error);
     }
     if(records.loading){
         return <Loading />
@@ -26,16 +26,16 @@ const MyRecords = () => {
     return <div className="records">
         <ul>
             <li>
-                Easy: {records.easy.value} character{records.easy.value>1?'s': ''} by second<br />
-                Registered: {formatDistanceToNow(new Date(records.easy.updatedAt), {addSuffix: true})}
+                <b>Easy :</b> {records.easy.value} character{records.easy.value>1?'s': ''} by second<br />
+                <b>Registered :</b> {formatDistanceToNow(new Date(records.easy.updatedAt), {addSuffix: true})}
             </li>
             <li>
-                Medium: {records.medium.value} character{records.medium.value>1?'s': ''} by second<br />
-                Registered: {formatDistanceToNow(new Date(records.medium.updatedAt), {addSuffix: true})}
+                <b>Medium :</b> {records.medium.value} character{records.medium.value>1?'s': ''} by second<br />
+                <b>Registered :</b> {formatDistanceToNow(new Date(records.medium.updatedAt), {addSuffix: true})}
             </li>
             <li>
-                Hard: {records.hard.value} character{records.hard.value>1?'s': ''} by second<br />
-                Registered: {formatDistanceToNow(new Date(records.hard.updatedAt), {addSuffix: true})}
+                <b>Hard :</b> {records.hard.value} character{records.hard.value>1?'s': ''} by second<br />
+                <b>Registered :</b> {formatDistanceToNow(new Date(records.hard.updatedAt), {addSuffix: true})}
             </li>
         </ul>
     </div>

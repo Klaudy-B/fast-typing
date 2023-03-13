@@ -1,4 +1,4 @@
-import { Outlet, Link, useLoaderData } from "react-router-dom";
+import { Outlet, Link, useLoaderData, NavLink } from "react-router-dom";
 import { UserContext } from "../context";
 
 const NavbarAndLayout = () => {
@@ -6,22 +6,24 @@ const NavbarAndLayout = () => {
   return <>
     <header>
       <div className="home-container">
-          <h1><Link to="/" className="home">Fast-Typing</Link></h1>
+          <h1><Link to="/" className="home-link">Fast-Typing</Link></h1>
         <nav>
           {data.user && <>
               <span>{data.user}</span>
-              <span><Link to='settings'>settings</Link></span>
+              <span><NavLink to='settings'>settings</NavLink></span>
               </>
           }
-          {!data.user && 
-            <div>
-              <Link to="login/username">Log in</Link>
-              <Link to="signup">Sign up</Link>
-            </div>
+          {!data.user &&<>
+              <NavLink to="login/username" className="home-login-link">Log in</NavLink>
+              <NavLink to="signup">Sign up</NavLink>
+              </>
           }
         </nav>
       </div>
-      {data.user&&<Link to='my-records'>My records</Link>}
+      {data.user&&<nav>
+        <Link to='my-records'>My records</Link>
+        <Link to='levels'>Levels</Link>
+        </nav>}
     </header>
     {data.error&& <div className="error-message">{ data.error }</div>}
       <UserContext.Provider value={{user: data.user, verified: data.verified, email: data.email}}>

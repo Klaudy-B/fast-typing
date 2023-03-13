@@ -46,16 +46,16 @@ module.exports.signupController = async (req, res)=>{
             hard: {value: 0},
             email,
             verified: false,
-            emailCode: 0,
-            recoveryCode: 0,
-            recoveryAuthorized: false
+            emailCode: {value: 0},
+            recoveryCode: {value: 0},
+            recoveryAuthorized: {value: 0}
          }
         const user = await User.create(body);
         const token = createToken(user._id);
         setCookie(res, 'fasttyping', token);
         return res.status(201).json({success: 'Your account has been created successfully.'});
     }catch(error){
-        signupErrorHandler(error, res);
+        signupErrorHandler(error, res, username);
     }
 }
 
@@ -178,7 +178,7 @@ module.exports.verifyEmailController = async (req, res)=>{
             for(let i=0; i<4; i++){
                 verificationCode += Math.round( Math.random()*9 ).toString();
             }
-            user.emailCode.value = Number(verificationCode);
+            user.emailCode = {value: Number(verificationCode)};
             await user.save();
             const transporter = createTransport(
                 {
@@ -233,7 +233,7 @@ module.exports.forgotPasswordController = async (req, res)=>{
             for(let i=0; i<4; i++){
                 code += Math.round( Math.random()*9 ).toString();
             }
-            user.recoveryCode = Number(code);
+            user.recoveryCode = {value: Number(code)};
             await user.save();
             const transporter = createTransport(
                 {
@@ -247,7 +247,7 @@ module.exports.forgotPasswordController = async (req, res)=>{
             await transporter.sendMail(
                 {
                     from: 'fasttypingaddress@gmail.com',
-                    to: `${user.email.value}`,
+                    to: `${user.email}`,
                     subject: 'Your email verification code',
                     html: `<b>${code}</b> is your fast-typing recovery code. This code will expire in 10 minutes.`
                 }
@@ -260,21 +260,21 @@ module.exports.forgotPasswordController = async (req, res)=>{
     if(req.method === 'POST'){
         try{
             const user = await User.findOne({ username: req.username });
-            if(!user.recoveryCode){
+            if(!user.recoveryCode.value){
                 return res.status(401).json({error: "You don't have a recovery code."});
             }
-            const expire = (Date.now()-user.recoveryCode)/60000;
+            const expire = (Date.now()-user.recoveryCode.updatedAt)/60000;
             if(expire>10){
                 return res.status(401).json({codeSent: true, error: 'The code has expired.'});
             }
-            const { code } = req.body;
-            if(Number(code) !== user.recoveryCode){
+            const { verificationCode } = req.body;
+            if(Number(verificationCode) !== user.recoveryCode.value){
                 return res.status(401).json({codeSent: true, noMatch: "The code doesn't match."});
             }
-            user.recoveryAuthorized = true;
-            user.recoveryCode = 0;
+            user.recoveryAuthorized.value = true;
+            user.recoveryCode.value = 0;
             await user.save();
-            return res.status(200).json({authorized: user.recoveryAuthorized});
+            return res.status(200).json({authorized: user.recoveryAuthorized.value});
         }catch(error){
             generalErrorHandler(error, res);
         }
@@ -283,7 +283,7 @@ module.exports.forgotPasswordController = async (req, res)=>{
 module.exports.recoverPasswordController = async (req, res)=>{
     try{
         const user = await User.findOne({ username: req.username });
-        if(!user.recoveryAuthorized){
+        if(!user.recoveryAuthorized.value){
             return res.status(401).json({error: 'Unauthorized'});
         }
         const { password2, password3 } = req.body;
@@ -298,7 +298,7 @@ module.exports.recoverPasswordController = async (req, res)=>{
         }
         const salt = await genSalt(10);
         user.password = await hash(password2, salt);
-        user.recoveryAuthorized = false;
+        user.recoveryAuthorized = {value: false};
         await user.save();
         return res.status(201).json({success: 'Your password has been changed successfully.'});
     }catch(error){
@@ -311,6 +311,7 @@ module.exports.forgotUsernameController = async (req, res)=>{
         const { username } = req.body;
         const usernames = await User.find({username: new RegExp(`${username}`, 'i')}).select('username -_id');
         return res.status(200).json(usernames);
+        
     }catch(error){
         generalErrorHandler(error, res);
     }
@@ -323,7 +324,7 @@ module.exports.deleteAccountController = async (req, res)=>{
             setCookie(res, 'fasttyping', '', 1);
             return res.status(401).json({error: 'Unauthorized'});
         }
-        const auth = compare(password, user.password);
+        const auth = await compare(password, user.password);
         if(!auth){
             return res.status(401).json({errorFields: {password: 'Incorrect password.'}});
         }

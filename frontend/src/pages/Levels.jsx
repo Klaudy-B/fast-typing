@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 const Levels = () => {
     document.title = 'Levels'
     return<>
-        <div className="levels">
             <h2>Levels</h2>
             <ul>
                 <li>
@@ -22,7 +21,6 @@ const Levels = () => {
                     <Link to="/play/hard">Play</Link>
                 </li>
             </ul>
-        </div>
     </>
 }
  

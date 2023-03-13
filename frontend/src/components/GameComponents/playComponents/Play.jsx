@@ -12,18 +12,18 @@ function Play() {
   const [ state, dispatch ] = useReducer(reducer, {loading: true});
   useFetch(state.error, useParams().level, dispatch, useFetchRecordAndWords);
     return <>
-      <header>
-      <div className="level">Level: { useParams().level }</div>
-      <div className="player-name">Player: {useContext(UserContext).user}</div>
-      </header>
-      <div className="record">Current record: {
+      <header className="play">
+      <div className="level"><b>Level:</b> { useParams().level }</div>
+      <div className="player-name"><b>Player:</b> {useContext(UserContext).user}</div>
+      <div className="record"><b>Current record:</b> {
         state.loading?<Loading />:
         <>{ state.record.value } {state.record.value>1 ?'characters':'character'} by second</>
         }
       </div>
-      <div className="record-date">Registered: {state.loading?<Loading />:
+      <div className="record-date"><b>Registered:</b> {state.loading?<Loading />:
         <>{formatDistanceToNow(new Date(state.record.updatedAt), { addSuffix: true})}</>
         }</div>
+      </header>
         <PlayContent loading={state.loading} record={state.record&&state.record.value} charactersList={state.charactersList} seconds={state.seconds} level={useParams().level} />
       <button disabled={state.loading} onClick={()=>location.reload()}>Restart</button>
   </>
