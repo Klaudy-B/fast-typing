@@ -2,14 +2,16 @@ const { sign } = require('jsonwebtoken');
 const { default: isEmail } = require('validator/lib/isEmail');
 
 const cookiesMaxAge = 365*24*60*60*1000;
-module.exports.wordsTotalNumber = 4;
 module.exports.setCookie = (res, key, value, maxAge)=>{
     if(maxAge === 'session'){
         res.cookie(key, value, {httpOnly: true, sameSite: 'strict'});
+        return;
     }else if(maxAge===undefined){
         res.cookie(key, value, {httpOnly: true, maxAge: cookiesMaxAge, sameSite: 'strict'});
+        return;
     }else{
         res.cookie(key, value, {httpOnly: true, maxAge , sameSite: 'strict'});
+        return;
     }  
 }
 module.exports.userValidator = (username, password1, password2, email)=>{
@@ -47,3 +49,67 @@ module.exports.createToken = (id)=>{
     return sign({ id }, process.env.SECRETSTRING, {expiresIn: cookiesMaxAge/1000});
 }
 module.exports.cookiesMaxAge = cookiesMaxAge;
+module.exports.words = [
+    'i',
+    'am',
+    'the',
+    'coding',
+    'god',
+    'nobody',
+    'can',
+    'deny',
+    'hackers',
+    'worst',
+    'nightmare',
+    'knowledge',
+    'jesus',
+    'what',
+    'an',
+    'app',
+    'working',
+    'well',
+    'now',
+    'try',
+    'to',
+    'set',
+    'a',
+    'new',
+    'record',
+    'good',
+    'song',
+    'sing',
+    'nice',
+    'get',
+    'this',
+    'you',
+    'make',
+    'ten',
+    'meals',
+    "you're",
+    'not',
+    'cook',
+    'twenty',
+    'paintings',
+    'artist',
+    'but',
+    'kill',
+    'one',
+    'person',
+    'verb',
+    'random',
+    'words',
+    'thinking',
+    'real',
+    'thought',
+    'will',
+    'notice',
+    'voice',
+    'love',
+    'like',
+    'kind',
+    'generous',
+    'unforgettable',
+    'memory',
+    'though',
+    'thorough'
+]

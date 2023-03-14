@@ -23,10 +23,3 @@ module.exports.User = new model('user', Schema(
         }
     )
 )
-module.exports.Word = new model('word', new Schema(
-        {
-            _id: String,
-            word: String
-        }
-    )
-)

@@ -1,5 +1,4 @@
-const { Word } = require('../models');
-const { wordsTotalNumber } = require('../helpers');
+const { words } = require('../helpers');
 const { generalErrorHandler } = require('../errorhandlers/authErrorHandlers');
 
 const getWords = async (req, res)=>{
@@ -26,26 +25,10 @@ const getWords = async (req, res)=>{
     }
     try{
         let helperstring = '';
-
-        for(let i = 1; i<=(wordsNumber); i++){
-        helperstring+=( Math.floor( Math.random()*(wordsTotalNumber)) + 1 ).toString();
-        }
-
-        const wordsArray = await Word.find({ _id: new RegExp(`[${helperstring}]`) }).select('word -_id');
-        helperstring = '';
-
         for(let i=0; i<=(wordsNumber-2); i++){
-            if(!wordsArray[i]){
-                helperstring+='word ';
-                continue;
-            }
-            helperstring+=wordsArray[i].word+' ';
+            helperstring+= words[Math.floor( Math.random()*(words.length))]+' ';
         }
-        if(!wordsArray[wordsNumber-1]){
-            helperstring+='word.';
-        }else{
-            helperstring+=wordsArray[wordsNumber-1].word='.';
-        }
+        helperstring+= words[Math.floor( Math.random()*(words.length))]+'.';
         return res.status(200).json({charactersList: helperstring.split(''), seconds });
     }catch(error){
         generalErrorHandler(error, res);
