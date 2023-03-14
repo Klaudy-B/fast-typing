@@ -21,8 +21,8 @@ const NavbarAndLayout = () => {
         </nav>
       </div>
       {data.user&&<nav>
-        <Link to='my-records'>My records</Link>
-        <Link to='levels'>Levels</Link>
+        <NavLink to='my-records'>My records</NavLink>
+        <NavLink to='levels'>Levels</NavLink>
         </nav>}
     </header>
     {data.error&& <div className="error-message">{ data.error }</div>}

@@ -1,3 +1,4 @@
+@import "https://fonts.googleapis.com/css?family=Quicksand"
 $primary: navy
 $secondary: gold
 $block-background: rgba(black, .5)
@@ -51,7 +52,7 @@ body
   background-color: $primary
   color: white
   text-align: center
-  font-family: "Trirong", 'Times New Roman', Times, serif
+  font-family: "Quicksand", "New times Roman", serif
   font-size: 1.2rem
 a
   @include link-style
@@ -68,8 +69,8 @@ button:hover
   @include link-on-hover
 button:active
   background-color: $active-link
-  
-  
+img
+  border-radius: 10px
 ul
   // @include flex($flow: column, $justify: space-around)
   padding: 0px
@@ -109,6 +110,10 @@ form
   padding: 5px
 input
   border-radius: 7px
+  padding: 5px
+textarea
+  resize: none
+  padding: 5px
 .play
   @include block
 .go, .timer, .text-displayer, .countdown
