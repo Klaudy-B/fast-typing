@@ -17,6 +17,9 @@ export const useFetchRecordAndWords = async (level, dispatch)=>{
             return dispatch({ error: errorMessage, loading: true});
         }
         const data = await res.json();
+        if(data.error){
+            throw Error(data.error);
+        }
         return dispatch({ record, charactersList: data.charactersList, seconds: data.seconds, loading: false});
     }catch(error){
         return dispatch({ error: error.message, loading: true});
@@ -32,6 +35,10 @@ export const useFetchNewRecord = async(level, dispatch, record)=>{
         })
         if(res.status === 500){
             return dispatch({error: errorMessage, rerender: false});
+        }
+        const data = await res.json();
+        if(data.error){
+            throw Error(data.error);
         }
         return dispatch({rerender: true});
        }catch(error){

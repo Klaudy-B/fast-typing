@@ -6,7 +6,7 @@ const { verify } = require('jsonwebtoken');
 const verifyUser = async (req, res, next)=>{
     try{
         if(!req.cookies || !req.cookies.fasttyping){
-            return res.status(401).end();
+            return res.status(401).json({error: 'Unauthorized'});
         }
         const decodedToken = verify(req.cookies.fasttyping, process.env.SECRETSTRING, (error, decodedToken)=>{
                 if(error){

@@ -1,5 +1,5 @@
-import { StrictMode, lazy, Suspense } from 'react';
-import { createRoot } from 'react-dom/client';
+import React, { lazy, Suspense } from 'react';
+import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
 
 import './style.sass';
@@ -50,33 +50,33 @@ import { checkLoginStateLoader } from './loaders';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-      <Route path='/' element={<NavbarAndLayout />} loader={checkLoginStateLoader} errorElement={<Oops />}>
-        <Route index element={<Home />} />
-        <Route path='levels' element={<Levels />} />
-        <Route path='my-records' element={<MyRecords />} />
-        <Route path='login/username' element={<LoginUsername />} action={loginUsernameAction} />
-        <Route path='login/password' element={<LoginPassword />} action={loginPasswordAction} />
-        <Route path='signup' element={<Signup />} action={signupAction} />
-        <Route path='play/:level' element={<Protected children={<Play />} />} />
-        <Route path='forgot-username' element={<ForgotUsername />} action={forgotUsernameAction} />
-        <Route path='settings' element={<Settings />} errorElement={<Oops />}>
-          <Route path='username' element={<Username />} action={usernameAction} />
-          <Route path='logout' element={<Logout />} action={logoutAction} />
-          <Route path='password' element={<Password />} action={passwordAction} />
-          <Route path='verify-email' element={<VerifyEmail />} action={verifyEmailAction} />
-          <Route path='change-email' element={<Email />} action={EmailAction} />
-          <Route path='forgot-password' element={<ForgotPassword />} action={forgotPasswordAction} />
-          <Route path='recover-password' element={<RecoverPassword />} action={recoverPasswordAction} />
-          <Route path='delete-account' element={<DeleteAccount />} action={deleteAccountAction} />
-        </Route>
-        <Route path="*" element={<NotFound />} />
+    <Route path='/' element={<NavbarAndLayout />} loader={checkLoginStateLoader} errorElement={<Oops />}>
+      <Route index element={<Home />} />
+      <Route path='levels' element={<Levels />} />
+      <Route path='my-records' element={<MyRecords />} />
+      <Route path='login/username' element={<LoginUsername />} action={loginUsernameAction} />
+      <Route path='login/password' element={<LoginPassword />} action={loginPasswordAction} />
+      <Route path='signup' element={<Signup />} action={signupAction} />
+      <Route path='play/:level' element={<Protected children={<Play />} />} />
+      <Route path='forgot-username' element={<ForgotUsername />} action={forgotUsernameAction} />
+      <Route path='settings' element={<Settings />} errorElement={<Oops />}>
+        <Route path='username' element={<Username />} action={usernameAction} />
+        <Route path='logout' element={<Logout />} action={logoutAction} />
+        <Route path='password' element={<Password />} action={passwordAction} />
+        <Route path='verify-email' element={<VerifyEmail />} action={verifyEmailAction} />
+        <Route path='change-email' element={<Email />} action={EmailAction} />
+        <Route path='forgot-password' element={<ForgotPassword />} action={forgotPasswordAction} />
+        <Route path='recover-password' element={<RecoverPassword />} action={recoverPasswordAction} />
+        <Route path='delete-account' element={<DeleteAccount />} action={deleteAccountAction} />
       </Route>
+      <Route path="*" element={<NotFound />} />
+    </Route>
   )
 )
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
     <Suspense fallback={<Loading />}>
     <RouterProvider router={ router } />
     </Suspense>
-  </StrictMode>,
+  </React.StrictMode>,
 )
