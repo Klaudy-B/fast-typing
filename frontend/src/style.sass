@@ -22,7 +22,6 @@ $active-link: gray
   border-radius: 5px
   padding: 5px
   font-weight: bold
-  // margin: 5px auto
   background-color: $secondary
   text-decoration: none
   color: white
@@ -35,10 +34,6 @@ $active-link: gray
 @mixin button-style
   @include link-style
   cursor: pointer
-// @mixin center
-//   margin: 5px 20%
-//   width: 60%
-//   font-weight: bold
 
 @mixin block
   @include center
@@ -65,14 +60,12 @@ a.active
 button
   @include button-style
 button:hover
-  // @include button-style
   @include link-on-hover
 button:active
   background-color: $active-link
 img
   border-radius: 10px
 ul
-  // @include flex($flow: column, $justify: space-around)
   padding: 0px
 li
   background-color: $block-background
