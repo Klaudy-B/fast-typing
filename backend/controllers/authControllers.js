@@ -185,7 +185,7 @@ module.exports.verifyEmailController = async (req, res)=>{
                     service: 'gmail',
                     auth: {
                         user: 'fasttypingaddress@gmail.com',
-                        pass: 'hjmapqpeaefrvdhi'
+                        pass: process.env.EMAIL_PASS
                     }
                 }
             )
@@ -240,7 +240,7 @@ module.exports.forgotPasswordController = async (req, res)=>{
                     service: 'gmail',
                     auth: {
                         user: 'fasttypingaddress@gmail.com',
-                        pass: 'hjmapqpeaefrvdhi'
+                        pass: process.env.EMAIL_PASS
                     }
                 }
             )
