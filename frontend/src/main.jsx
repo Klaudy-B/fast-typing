@@ -1,32 +1,32 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { StrictMode, lazy, Suspense } from 'react';
+import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
 
 import './style.sass';
 
 import NotFound from './pages/NotFound';
-import Home from './pages/Home';
-import Levels from './pages/Levels';
-import LoginUsername from './pages/LoginUsername';
-import LoginPassword from './pages/LoginPassword';
-import Signup from './pages/Signup';
-import MyRecords from './pages/MyRecords';
+const Home = lazy(()=>import('./pages/Home'));
+const Levels = lazy(()=>import('./pages/Levels'));
+const LoginUsername = lazy(()=>import('./pages/LoginUsername'));
+const LoginPassword = lazy(()=>import('./pages/LoginPassword'));
+const Signup = lazy(()=>import('./pages/Signup'));
+const MyRecords = lazy(()=>import('./pages/MyRecords'));
+const Settings = lazy(()=>import('./pages/Settings'));
 
+import Loading from './components/Loading';
 import Protected from './components/Protected';
 import NavbarAndLayout from './components/NavbarAndLayout';
-import Play from './components/GameComponents/playComponents/Play';
-import Settings from './components/Settings';
-import Username from './components/Username';
-import Logout from './components/Logout';
-import Password from './components/password';
-import Email from './components/Email';
-import VerifyEmail from './components/VerifyEmail';
-import ForgotPassword from './components/ForgotPassword';
-import RecoverPassword from './components/RecoverPassword';
-import ForgotUsername from './components/ForgotUsername';
-import DeleteAccount from './components/DeleteAccount';
-import Oops from './components/Oops';
-
+const Play = lazy(()=>import('./components/GameComponents/playComponents/Play'));
+const Username = lazy(()=>import('./components/Username'));
+const Logout = lazy(()=>import('./components/Logout'));
+const Password = lazy(()=>import('./components/password'));
+const Email = lazy(()=>import('./components/Email'));
+const VerifyEmail = lazy(()=>import('./components/VerifyEmail'));
+const ForgotPassword = lazy(()=>import('./components/ForgotPassword'));
+const RecoverPassword = lazy(()=>import('./components/RecoverPassword'));
+const ForgotUsername = lazy(()=>import('./components/ForgotUsername'));
+const DeleteAccount = lazy(()=>import('./components/DeleteAccount'));
+const Oops = lazy(()=>import('./components/Oops'));
 
 import {
   deleteAccountAction,
@@ -73,8 +73,10 @@ const router = createBrowserRouter(
       </Route>
   )
 )
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <Suspense fallback={<Loading />}>
     <RouterProvider router={ router } />
-  </React.StrictMode>,
+    </Suspense>
+  </StrictMode>,
 )
