@@ -1,4 +1,4 @@
-import { useReducer, useContext } from "react";
+import { useReducer, useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import { UserContext } from "../../../context";
@@ -10,7 +10,12 @@ import PlayContent from "./PlayContent";
 function Play() {
   document.title = 'play';
   const [ state, dispatch ] = useReducer(reducer, {loading: true});
-  useFetch(state.error, useParams().level, dispatch, useFetchRecordAndWords);
+  const [seed, setSeed] = useState(false);
+       const reset = () => {
+            dispatch({loading: true});
+            setSeed(!seed);
+        }
+  useFetch(state.error, seed, useParams().level, dispatch, useFetchRecordAndWords);
     return <>
       <header className="play">
       <div className="level"><b>Level:</b> { useParams().level }</div>
@@ -24,8 +29,14 @@ function Play() {
         <>{formatDistanceToNow(new Date(state.record.updatedAt), { addSuffix: true})}</>
         }</div>
       </header>
-        <PlayContent loading={state.loading} record={state.record&&state.record.value} charactersList={state.charactersList} seconds={state.seconds} level={useParams().level} />
-      <button disabled={state.loading} onClick={()=>location.reload()}>Restart</button>
+        <PlayContent
+        key={seed}
+        loading={state.loading}
+        record={state.record&&state.record.value}
+        charactersList={state.charactersList}
+        seconds={state.seconds} level={useParams().level}
+         />
+      <button disabled={state.loading} onClick={()=>reset()}>Replay</button>
   </>
   
 }

@@ -45,12 +45,12 @@ export const useFetchNewRecord = async(level, dispatch, record)=>{
         return dispatch({error: error.message, rerender: false});
        }
 }
-export const useFetch = (error, level, dispatch, callBack)=>{
+export const useFetch = (error, seed, level, dispatch, callBack)=>{
     useEffect(
         ()=>{
             callBack(level, dispatch);
         },
-        []
+        [seed]
     )
     if(error){
         throw Error(error);
