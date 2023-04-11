@@ -6,9 +6,10 @@ import {  useFetchRecordAndWords, useFetch } from "../../../hooks";
 import Loading from "../../Loading";
 import { reducer } from "../../../scripts/helpers";
 import PlayContent from "./PlayContent";
+import { setTitle } from "../../../scripts/helpers";
 
 function Play() {
-  document.title = 'play';
+  setTitle('play');
   const [ state, dispatch ] = useReducer(reducer, {loading: true});
   const [seed, setSeed] = useState(false);
        const reset = () => {

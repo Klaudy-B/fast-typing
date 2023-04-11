@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
+import { setTitle, urls } from "../scripts/helpers";
+
 const NotFound = () => {
-    document.title = 'Page not found';
+    setTitle('Page not found');
     return <>
         <h1>Page not found.</h1>
-        <div>Back to the <Link to='/'>homepage</Link>.</div>
+        <div>Back to the <Link to={urls.home}>homepage</Link>.</div>
     </>
 }
  

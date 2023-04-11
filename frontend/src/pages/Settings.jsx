@@ -1,15 +1,16 @@
 import { Link, Outlet } from "react-router-dom";
+import { setTitle, urls } from "../scripts/helpers";
 
 const Settings = () => {
-    document.title = 'Settings';
+    setTitle('Settings');
     return <>
         <ul>
-            <li><Link to='username'>Change my username</Link></li>
-            <li><Link to='password'>Change my password</Link></li>
-            <li><Link to='verify-email'>Verify my email</Link></li>
-            <li><Link to='change-email'>Change my email</Link></li>
-            <li><Link to='logout'>Log out</Link></li>
-            <li><Link to='delete-account'>Delete my account</Link></li>
+            <li><Link to={`${urls.settings}${urls.username}`}>Change my username</Link></li>
+            <li><Link to={`${urls.settings}${urls.password}`}>Change my password</Link></li>
+            <li><Link to={`${urls.settings}${urls.verifyEmail}`}>Verify my email</Link></li>
+            <li><Link to={`${urls.settings}${urls.changeEmail}`}>Change my email</Link></li>
+            <li><Link to={`${urls.settings}${urls.logout}`}>Log out</Link></li>
+            <li><Link to={`${urls.settings}${urls.deleteAccount}`}>Delete my account</Link></li>
         </ul>
         <Outlet />
     </>

@@ -1,28 +1,29 @@
 import { Outlet, Link, useLoaderData, NavLink } from "react-router-dom";
 import { UserContext } from "../context";
+import { urls } from "../scripts/helpers";
 
 const NavbarAndLayout = () => {
   const data = useLoaderData();
   return <>
     <header>
       <div className="home-container">
-          <h1><Link to="/" className="home-link">Fast-Typing</Link></h1>
+          <h1><Link to={urls.home} className="home-link">Fast-Typing</Link></h1>
         <nav>
           {data.user && <>
               <span>{data.user}</span>
-              <span><NavLink to='settings'>settings</NavLink></span>
+              <span><NavLink to={urls.settings}>settings</NavLink></span>
               </>
           }
           {!data.user &&<>
-              <NavLink to="login/username" className="home-login-link">Log in</NavLink>
-              <NavLink to="signup">Sign up</NavLink>
+              <NavLink to={`${urls.login}${urls.username}`}className="home-login-link">Log in</NavLink>
+              <NavLink to={urls.signup}>Sign up</NavLink>
               </>
           }
         </nav>
       </div>
       {data.user&&<nav>
-        <NavLink to='my-records'>My records</NavLink>
-        <NavLink to='levels'>Levels</NavLink>
+        <NavLink to={urls.myRecords}>My records</NavLink>
+        <NavLink to={urls.levels}>Levels</NavLink>
         </nav>}
     </header>
     {data.error&& <div className="error-message">{ data.error }</div>}

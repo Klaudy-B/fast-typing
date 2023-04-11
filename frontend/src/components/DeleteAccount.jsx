@@ -1,21 +1,21 @@
 import { useState } from "react";
 import { Form, useActionData, Link } from "react-router-dom";
+import { placeholders, setTitle, urls } from "../scripts/helpers";
 
 const DeleteAccount = () => {
-    document.title = 'Delete account';
+    setTitle('Delete account');
     const data = useActionData();
     const [rerender, setRerender] = useState(false);
     if(rerender){
-        return <Form className="delete-account-form" method="post" action="/settings/delete-account">
-        <label>Type in your password:</label>
-        <input type="password" name="password" required />
+        return <Form id="delete-account-form" method="post" action={`${urls.settings}${urls.deleteAccount}`}>
+        <input type="password" name="password" placeholder={placeholders.password} required />
         {data&&data.errorFields&&<div className="error-message">{data.errorFields.password}</div>}
         <button>Delete my account</button>
         {data&&data.success&&<div className="success-message">
             {data.success}<br />
             <Link to='/'>Done</Link>
             </div>}
-            {(!data||data&&!data.success)&&<Link to='/settings'>Back</Link>}
+            {(!data||data&&!data.success)&&<Link to={urls.settings}>Back</Link>}
     </Form>
     }
     return<div className="delete-account">

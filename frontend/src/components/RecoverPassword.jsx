@@ -1,13 +1,13 @@
 import { Form, useActionData } from "react-router-dom";
+import { placeholders, setTitle, urls } from "../scripts/helpers";
 
 const RecoverPassword = () => {
+    setTitle('Recover password');
     const data = useActionData();
-        return <Form method="post" action="/settings/recover-password">
-        <label>Your new password:</label>
-        <input type="password" name="new-password" placeholder="Type in your new password here" required />
+        return <Form id="recover-password-form" method="post" action={`${urls.settings}${urls.recoverPassword}`}>
+        <input type="password" name="new-password" placeholder={placeholders.newPassword} required />
         {data&&data.errorFields&&data.errorFields.password2&& <div className="error-message">{data.errorFields.password2}</div>}
-        <label>Confirm your new password:</label>
-        <input type="password" name="new-password-confirmation" placeholder="Type in your new password again" 
+        <input type="password" name="new-password-confirmation" placeholder={placeholders.newPasswordConfirmation} 
         required />
         {data&&data.errorFields&&data.errorFields.password3&& <div className="error-message">{data.errorFields.password3}</div>}
         <button>Change password</button>

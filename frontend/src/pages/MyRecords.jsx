@@ -1,14 +1,15 @@
 import { useEffect, useReducer } from "react";
 import { reducer } from "../scripts/helpers";
-import formatDistanceToNow from "date-fns/formatDistanceToNow"
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 import Loading from "../components/Loading";
+import { setTitle, urls } from "../scripts/helpers";
 
 const MyRecords = () => {
-    document.title = 'My records';
+    setTitle('My records');
     const [ records, dispatch ] = useReducer(reducer, {loading: true});
     useEffect(
         ()=>{
-            fetch(`${import.meta.env.VITE_BACKEND}/records/my-records`, {
+            fetch(`${import.meta.env.VITE_BACKEND}${urls.backend.records}${urls.backend.myRecords}`, {
                 credentials: 'include'
             })
             .then(res=>res.json())

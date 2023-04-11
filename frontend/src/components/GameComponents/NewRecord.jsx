@@ -8,7 +8,7 @@ const NewRecord = ({ record ,level, start }) => {
         throw Error(state.error);
     }
       if(!start){
-        return;
+        return <></>;
     }
     if(record>0&&!state.rerender){
         useFetchNewRecord(level, dispatch, record);
