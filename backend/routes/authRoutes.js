@@ -12,13 +12,15 @@ const {
     forgotPasswordController,
     recoverPasswordController,
     forgotUsernameController,
-    deleteAccountController
+    deleteAccountController,
+    forgotPasswordLoaderController
 } = require('../controllers/authControllers');
 
 router.get('/check-login-state', checkLoginStateController);
 router.get('/verify-email', verifyUser, verifyEmailController);
 router.get('/forgot-password', forgotPasswordMiddleware, forgotPasswordController);
 router.get('/logout', logoutController);
+router.get('/forgot-password-loader', forgotPasswordLoaderController);
 
 router.post('/login', loginController);
 router.post('/signup', signupController);

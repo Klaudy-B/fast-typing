@@ -1,11 +1,9 @@
-import { useContext } from "react";
-import { useActionData, Form, Link, Navigate } from "react-router-dom";
-import { UserContext } from "../context";
+import { useActionData, Form, Link, Navigate, useLoaderData } from "react-router-dom";
 import { setTitle, placeholders, urls } from "../scripts/helpers";
 
 const ForgotPassword = () => {
     setTitle('Forgot password');
-    const { verified, user, email } = useContext(UserContext);
+    const { verified, user, email } = useLoaderData();
     const data = useActionData();
     if(!data&&user&&!verified){
         return <div className="success-message">

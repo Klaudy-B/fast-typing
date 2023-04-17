@@ -43,7 +43,7 @@ import {
   verifyEmailAction
 } from './actions';
 
-import { checkLoginStateLoader } from './loaders';
+import { checkLoginStateLoader, forgotPasswordLoader } from './loaders';
 
 
 
@@ -65,7 +65,7 @@ const router = createBrowserRouter(
         <Route path='password' element={<Password />} action={passwordAction} />
         <Route path='verify-email' element={<VerifyEmail />} action={verifyEmailAction} />
         <Route path='change-email' element={<Email />} action={EmailAction} />
-        <Route path='forgot-password' element={<ForgotPassword />} action={forgotPasswordAction} />
+        <Route path='forgot-password' element={<ForgotPassword />} loader={forgotPasswordLoader} action={forgotPasswordAction} />
         <Route path='recover-password' element={<RecoverPassword />} action={recoverPasswordAction} />
         <Route path='delete-account' element={<DeleteAccount />} action={deleteAccountAction} />
       </Route>
