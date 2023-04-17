@@ -63,7 +63,7 @@ const router = createBrowserRouter(
         <Route path='username' element={<Username />} action={usernameAction} />
         <Route path='logout' element={<Logout />} action={logoutAction} />
         <Route path='password' element={<Password />} action={passwordAction} />
-        <Route path='verify-email' element={<VerifyEmail />} action={verifyEmailAction} />
+        <Route path='verify-email' element={<VerifyEmail />} loader={forgotPasswordLoader} action={verifyEmailAction} />
         <Route path='change-email' element={<Email />} action={EmailAction} />
         <Route path='forgot-password' element={<ForgotPassword />} loader={forgotPasswordLoader} action={forgotPasswordAction} />
         <Route path='recover-password' element={<RecoverPassword />} action={recoverPasswordAction} />
