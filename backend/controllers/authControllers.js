@@ -56,6 +56,47 @@ module.exports.checkLoginStateController = async (req, res)=>{
         generalErrorHandler(error, res);
     }
 }
+module.exports.forgotPasswordLoaderController = async (req, res)=>{
+    try{
+        if(!req.cookies ||(!req.cookies[process.env.APP_NAME] && !req.cookies[`${process.env.APP_NAME}loginusername`])){
+            return res.status(200).json({});
+        }
+        if(req.cookies[process.env.APP_NAME]){
+            const { id } = verify(req.cookies[process.env.APP_NAME], process.env.SECRETSTRING, (error, decodedToken)=>{
+                    if(error){
+                        setCookie(res, process.env.APP_NAME, '', 1);
+                        return res.status(400).end();
+                    }
+                    return decodedToken;
+                }
+            )
+            var user = await User.findOne({_id: id}).select('username verified email');
+        }
+        if(req.cookies[`${process.env.APP_NAME}loginusername`]){
+            const { id: username } = verify(req.cookies[`${process.env.APP_NAME}loginusername`], process.env.SECRETSTRING, (error, decodedToken)=>{
+                    if(error){
+                        setCookie(res, `${process.env.APP_NAME}loginusername`, '', 1);
+                        return res.status(400).end();
+                    }
+                    return decodedToken;
+                }
+            )
+            var user = await User.findOne({username}).select('username verified email');
+        }
+        if(!user){
+            setCookie(res, process.env.APP_NAME, '', 1);
+            setCookie(res, `${process.env.APP_NAME}loginusername`, '', 1);
+            throw { error: invalidToken};
+        }
+        if(req.cookies[`${process.env.APP_NAME}loginusername`]){
+            return res.status(200).json({ user: user.username, verified: user.verified, email: user.email});
+        }
+        setCookie(res, process.env.APP_NAME, req.cookies[process.env.APP_NAME]);
+        return res.status(200).json({ user: user.username, verified: user.verified, email: user.email});
+    }catch(error){
+        generalErrorHandler(error, res);
+    }
+}
 module.exports.signupController = async (req, res)=>{
     const { username, password1, password2, email } = req.body;
     try{

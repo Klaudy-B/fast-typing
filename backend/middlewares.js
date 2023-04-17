@@ -5,12 +5,12 @@ const { verify } = require('jsonwebtoken');
 
 const verifyUser = async (req, res, next)=>{
     try{
-        if(!req.cookies || !req.cookies.fasttyping){
+        if(!req.cookies || !req.cookies[process.env.APP_NAME]){
             return res.status(401).json({error: 'Unauthorized'});
         }
-        const decodedToken = verify(req.cookies.fasttyping, process.env.SECRETSTRING, (error, decodedToken)=>{
+        const decodedToken = verify(req.cookies[process.env.APP_NAME], process.env.SECRETSTRING, (error, decodedToken)=>{
                 if(error){
-                    setCookie(res, 'fasttyping', '', 1);
+                    setCookie(res, process.env.APP_NAME, '', 1);
                     return res.status(401).end();
                 }
                 return decodedToken;
@@ -18,10 +18,10 @@ const verifyUser = async (req, res, next)=>{
         )
         const user = await User.findOne({_id: decodedToken.id}).select('username');
         if(!user){
-            setCookie(res, 'fasttyping', '', 1);
+            setCookie(res, process.env.APP_NAME, '', 1);
             return res.status(401).end();
         }
-        setCookie(res, 'fasttyping', req.cookies.fasttyping);
+        setCookie(res, process.env.APP_NAME, req.cookies[process.env.APP_NAME]);
         req.username = user.username;
         next();
     }catch(error){
@@ -31,10 +31,10 @@ const verifyUser = async (req, res, next)=>{
 
 const forgotPasswordMiddleware = (req, res, next)=>{
     try{
-        if(req.cookies&&req.cookies.fasttypingloginusername){
-            const {id: username} = verify(req.cookies.fasttypingloginusername, process.env.SECRETSTRING, (error, decodedToken)=>{
+        if(req.cookies&&req.cookies[`${process.env.APP_NAME}loginusername`]){
+            const {id: username} = verify(req.cookies[`${process.env.APP_NAME}loginusername`], process.env.SECRETSTRING, (error, decodedToken)=>{
                 if(error){
-                    setCookie(res, 'fasttypingloginusername', '', 1);
+                    setCookie(res, `${process.env.APP_NAME}loginusername`, '', 1);
                     return res.status(401).end();
                 }
                 return decodedToken;
