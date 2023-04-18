@@ -303,6 +303,7 @@ module.exports.verifyEmailController = async (req, res)=>{
 module.exports.forgotPasswordController = async (req, res)=>{
     if(req.method === 'GET'){
         try{
+            console.log(req.username)
             const user = await User.findOne({ username: req.username });
             let code = '';
             for(let i=0; i<4; i++){
