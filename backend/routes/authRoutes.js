@@ -24,7 +24,7 @@ router.get('/forgot-password-loader', forgotPasswordLoaderController);
 
 router.post('/login', loginController);
 router.post('/signup', signupController);
-router.post('/verify-email', verifyUser, verifyEmailController);
+router.post('/verify-email', forgotPasswordMiddleware, verifyEmailController);
 router.post('/forgot-password', forgotPasswordMiddleware, forgotPasswordController);
 router.post('/recover-password', forgotPasswordMiddleware, recoverPasswordController);
 router.post('/forgot-username', forgotUsernameController);
