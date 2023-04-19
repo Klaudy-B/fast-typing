@@ -3,13 +3,9 @@ import { setTitle, placeholders, urls } from "../scripts/helpers";
 
 const ForgotPassword = () => {
     setTitle('Forgot password');
-    const { verified, user, email } = useLoaderData();
+    const { email } = useLoaderData();
     const data = useActionData();
-    if(!data&&user&&!verified){
-        return <div className="success-message">
-        <span>Your email is not verified. Click <Link to='/settings/verify-email'>here</Link> to verify your email first.</span>
-        </div>
-    }
+
     if(data&&data.authorized){
         return <Navigate to='/settings/recover-password' />
     }

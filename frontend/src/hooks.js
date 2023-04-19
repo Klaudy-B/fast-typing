@@ -25,24 +25,24 @@ export const useFetchRecordAndWords = async (level, dispatch)=>{
         return dispatch({ error: error.message, loading: true});
     }
 }
-export const useFetchNewRecord = async(level, dispatch, record)=>{
+export const useFetchNewRecord = async(level, record)=>{
     try{
-        const res = await fetch(`${import.meta.env.VITE_BACKEND}${urls.backend.records}/${level}${urls.backend.personalRecord}`,{
+        const res = await fetch(`${import.meta.env.VITE_BACKEND}${urls.backend.records}/${level}${urls.backend.setRecord}`,{
             method: 'POST',
             body: JSON.stringify({ newRecord: record }),
             credentials: 'include',
             headers: {'content-type': 'application/json'}
         })
         if(res.status === 500){
-            return dispatch({error: errorMessage, rerender: false});
+            return {error: errorMessage, rerender: false};
         }
         const data = await res.json();
         if(data.error){
             throw Error(data.error);
         }
-        return dispatch({rerender: true});
+        return {rerender: true};
        }catch(error){
-        return dispatch({error: error.message, rerender: false});
+        return {error: error.message, rerender: false};
        }
 }
 export const useFetch = (error, seed, level, dispatch, callBack)=>{

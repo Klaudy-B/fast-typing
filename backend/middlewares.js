@@ -45,11 +45,12 @@ const forgotPasswordMiddleware = async (req, res, next)=>{
             }
             req.username = user.username;
             next();
+        }else{
+            await verifyUser(req, res, next);
         }
     }catch(error){
         generalErrorHandler(error, res);
     }
-    verifyUser(req, res, next);
 }
 
 module.exports = { verifyUser, forgotPasswordMiddleware };
