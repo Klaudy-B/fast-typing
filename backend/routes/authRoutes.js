@@ -17,14 +17,14 @@ const {
 } = require('../controllers/authControllers');
 
 router.get('/check-login-state', checkLoginStateController);
-router.get('/verify-email', verifyUser, verifyEmailController);
+router.get('/verify-email', forgotPasswordMiddleware, verifyEmailController);
 router.get('/forgot-password', forgotPasswordMiddleware, forgotPasswordController);
 router.get('/logout', logoutController);
 router.get('/forgot-password-loader', forgotPasswordLoaderController);
 
 router.post('/login', loginController);
 router.post('/signup', signupController);
-router.post('/verify-email', verifyUser, verifyEmailController);
+router.post('/verify-email', forgotPasswordMiddleware, verifyEmailController);
 router.post('/forgot-password', forgotPasswordMiddleware, forgotPasswordController);
 router.post('/recover-password', forgotPasswordMiddleware, recoverPasswordController);
 router.post('/forgot-username', forgotUsernameController);

@@ -7,11 +7,13 @@ const NewRecord = ({ record ,level, start }) => {
     if(state.error){
         throw Error(state.error);
     }
-      if(!start){
+    if(!start){
         return <></>;
     }
     if(record>0&&!state.rerender){
-        useFetchNewRecord(level, dispatch, record);
+        useFetchNewRecord(level, record)
+        .then(res=>dispatch(res))
+        .catch(error=>dispatch({error: error.message}));
     }
     if(state.rerender){
         return <div className="new-record"><b>New record: </b><span className="correct">{record}</span>{(record>1)?' characters':' character'} by seconds</div>
