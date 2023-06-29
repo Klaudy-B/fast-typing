@@ -13,7 +13,7 @@ const Signup = lazy(()=>import('./pages/Signup'));
 const MyRecords = lazy(()=>import('./pages/MyRecords'));
 const Settings = lazy(()=>import('./pages/Settings'));
 
-import Loading from './components/Loading';
+import AbsoluteLoading from './components/AbsoluteLoading';
 import Protected from './components/Protected';
 import NavbarAndLayout from './components/NavbarAndLayout';
 const Play = lazy(()=>import('./components/GameComponents/playComponents/Play'));
@@ -44,13 +44,14 @@ import {
 } from './actions';
 
 import { checkLoginStateLoader, forgotPasswordLoader } from './loaders';
+import { base } from './scripts/helpers';
 
 
 
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path='/' element={<NavbarAndLayout />} loader={checkLoginStateLoader} errorElement={<Oops />}>
+    <Route path={base} element={<NavbarAndLayout />} loader={checkLoginStateLoader} errorElement={<Oops />}>
       <Route index element={<Home />} />
       <Route path='levels' element={<Levels />} />
       <Route path='my-records' element={<MyRecords />} />
@@ -75,8 +76,8 @@ const router = createBrowserRouter(
 )
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Suspense fallback={<Loading />}>
-    <RouterProvider router={ router } />
+    <Suspense fallback={<AbsoluteLoading />}>
+      <RouterProvider router={ router } />
     </Suspense>
   </React.StrictMode>,
 )

@@ -19,7 +19,7 @@ const calculateSpeedAtTimeup = (time)=>{
     .querySelector('div.completion-message')
     .innerHTML =
     `Time's up!<br />
-    <b>Errors: </b>:<span class="error">${document.querySelectorAll('span.incorrect').length}</span><br />
+    <b>Errors: </b><span class="error">${document.querySelectorAll('span.incorrect').length}</span><br />
     <b>Average speed: </b><span class="error">${speed}</span>${speed>1?' characters':' character'} by second`;
 }
 

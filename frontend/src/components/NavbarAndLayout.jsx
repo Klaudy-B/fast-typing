@@ -11,7 +11,7 @@ const NavbarAndLayout = () => {
         <nav>
           {data.user && <>
               <span>{data.user}</span>
-              <span><NavLink to={urls.settings}>settings</NavLink></span>
+              <NavLink to={urls.settings}>settings</NavLink>
               </>
           }
           {!data.user &&<>
