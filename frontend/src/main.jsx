@@ -44,13 +44,14 @@ import {
 } from './actions';
 
 import { checkLoginStateLoader, forgotPasswordLoader } from './loaders';
+import { base } from './scripts/helpers';
 
 
 
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path='/' element={<NavbarAndLayout />} loader={checkLoginStateLoader} errorElement={<Oops />}>
+    <Route path={base} element={<NavbarAndLayout />} loader={checkLoginStateLoader} errorElement={<Oops />}>
       <Route index element={<Home />} />
       <Route path='levels' element={<Levels />} />
       <Route path='my-records' element={<MyRecords />} />

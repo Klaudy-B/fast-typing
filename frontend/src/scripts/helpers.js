@@ -18,25 +18,33 @@ export const placeholders = {
     rememberUsername: "Type in the username you remember",
     newPasswordConfirmation: "Confirm your new password"
 }
-export const urls = {
+const root = '/fast-typing';
+let routes = {
+    //relative to the base
     home: '/',
-    logout: '/logout',
-    deleteAccount: '/delete-account',
     levels: '/levels',
     play: '/play',
+    login: '/login',
+    signup: '/signup',
+    settings: '/settings',
+    myRecords: '/my-records',
+    forgotUsername: '/forgot-username'
+}
+for(const x in routes){
+    routes[x] = root+routes[x];
+}
+routes = {
+    ...routes,
+    logout: '/logout',
+    deleteAccount: '/delete-account',
     easy: '/easy',
     medium: '/medium',
     hard: '/hard',
-    login: '/login',
     password: '/password',
     username: '/username',
     changeEmail: '/change-email',
     verifyEmail: '/verify-email',
-    signup: '/signup',
-    settings: '/settings',
     forgotPassword: '/forgot-password',
-    forgotUsername: '/forgot-username',
-    myRecords: '/my-records',
     recoverPassword: '/recover-password',
     backend: {
         records: '/records',
@@ -46,3 +54,5 @@ export const urls = {
         words: '/words'
     }
 }
+export const urls = routes;
+export const base = root;
