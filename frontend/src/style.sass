@@ -157,6 +157,16 @@ b
   position: absolute
   top: calc( 50vh - 25px )
   left: calc( 50vw - 25px )
+.loading
+  display: inline-block
+  width: 30px
+  height: 30px
+  border-radius: 50%
+  background: radial-gradient(farthest-side,#FFD700,#0000) top/8px 8px no-repeat, conic-gradient(#0000 30%,#FFD700)
+  -webkit-mask: radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0)
+  animation: s3 1s infinite linear
+  position: relative
+  top: 15px
 
 footer
   padding: 10px

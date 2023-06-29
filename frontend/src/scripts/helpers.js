@@ -18,7 +18,7 @@ export const placeholders = {
     rememberUsername: "Type in the username you remember",
     newPasswordConfirmation: "Confirm your new password"
 }
-const root = '/fast-typing';
+const root = '';
 let routes = {
     //relative to the base
     home: '/',

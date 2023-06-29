@@ -13,7 +13,7 @@ const Signup = lazy(()=>import('./pages/Signup'));
 const MyRecords = lazy(()=>import('./pages/MyRecords'));
 const Settings = lazy(()=>import('./pages/Settings'));
 
-import Loading from './components/Loading';
+import AbsoluteLoading from './components/AbsoluteLoading';
 import Protected from './components/Protected';
 import NavbarAndLayout from './components/NavbarAndLayout';
 const Play = lazy(()=>import('./components/GameComponents/playComponents/Play'));
@@ -76,8 +76,8 @@ const router = createBrowserRouter(
 )
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Suspense fallback={<Loading />}>
-    <RouterProvider router={ router } />
+    <Suspense fallback={<AbsoluteLoading />}>
+      <RouterProvider router={ router } />
     </Suspense>
   </React.StrictMode>,
 )
